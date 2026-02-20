@@ -1,8 +1,9 @@
 # Robot Framework results
-results/
 output.xml
 log.html
 report.html
+*.xml
+*.html
 
 # Screenshots
 *.png
