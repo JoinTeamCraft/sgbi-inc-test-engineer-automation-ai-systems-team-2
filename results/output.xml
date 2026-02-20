@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.4.1 (Python 3.12.10 on win32)" generated="2026-02-20T20:36:27.535969" rpa="false" schemaversion="5">
+<suite id="s1" name="Tests" source="C:\Automation\morent-robot-python-automation\sgbi-inc-test-engineer-automation-ai-systems-team-5\tests">
+<suite id="s1-s1" name="Smoke" source="C:\Automation\morent-robot-python-automation\sgbi-inc-test-engineer-automation-ai-systems-team-5\tests\smoke">
+<suite id="s1-s1-s1" name="App Launch Tests" source="C:\Automation\morent-robot-python-automation\sgbi-inc-test-engineer-automation-ai-systems-team-5\tests\smoke\app_launch_tests.robot">
+<test id="s1-s1-s1-t1" name="SG-1 Verify Application Launch" line="8">
+<kw name="Open MoRent Application" owner="keywords">
+<kw name="Get Config Value" owner="config.env_config.EnvConfig">
+<msg time="2026-02-20T20:36:27.702679" level="INFO">${url} = https://morent-car.archisacademy.com/</msg>
+<var>${url}</var>
+<arg>BASE_URL</arg>
+<doc>Placeholder for config retrieval.</doc>
+<status status="PASS" start="2026-02-20T20:36:27.702679" elapsed="0.000000"/>
+</kw>
+<kw name="Get Config Value" owner="config.env_config.EnvConfig">
+<msg time="2026-02-20T20:36:27.702679" level="INFO">${browser} = chrome</msg>
+<var>${browser}</var>
+<arg>BROWSER</arg>
+<doc>Placeholder for config retrieval.</doc>
+<status status="PASS" start="2026-02-20T20:36:27.702679" elapsed="0.000000"/>
+</kw>
+<kw name="Get Config Value" owner="config.env_config.EnvConfig">
+<msg time="2026-02-20T20:36:27.702679" level="INFO">${timeout} = 20</msg>
+<var>${timeout}</var>
+<arg>LONG_TIMEOUT</arg>
+<doc>Placeholder for config retrieval.</doc>
+<status status="PASS" start="2026-02-20T20:36:27.702679" elapsed="0.000000"/>
+</kw>
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2026-02-20T20:36:27.702679" level="INFO">Opening browser 'chrome' to base url 'https://morent-car.archisacademy.com/'.</msg>
+<arg>${url}</arg>
+<arg>${browser}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2026-02-20T20:36:27.702679" elapsed="1.793424"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2026-02-20T20:36:29.496103" elapsed="0.023857"/>
+</kw>
+<doc>Open the MoRent application in the browser and maximize the window.</doc>
+<status status="PASS" start="2026-02-20T20:36:27.702679" elapsed="1.817281"/>
+</kw>
+<kw name="Verify No Browser Error" owner="keywords">
+<kw name="Get Config Value" owner="config.env_config.EnvConfig">
+<msg time="2026-02-20T20:36:29.521234" level="INFO">${page_not_found_code} = 404</msg>
+<var>${page_not_found_code}</var>
+<arg>PAGE_NOT_FOUND_CODE</arg>
+<doc>Placeholder for config retrieval.</doc>
+<status status="PASS" start="2026-02-20T20:36:29.521234" elapsed="0.000000"/>
+</kw>
+<kw name="Get Config Value" owner="config.env_config.EnvConfig">
+<msg time="2026-02-20T20:36:29.521234" level="INFO">${server_error_code} = 500</msg>
+<var>${server_error_code}</var>
+<arg>SERVER_ERROR_CODE</arg>
+<doc>Placeholder for config retrieval.</doc>
+<status status="PASS" start="2026-02-20T20:36:29.521234" elapsed="0.000000"/>
+</kw>
+<kw name="Get Title" owner="SeleniumLibrary">
+<msg time="2026-02-20T20:36:29.525286" level="INFO">${title} = Morent</msg>
+<var>${title}</var>
+<doc>Returns the title of the current page.</doc>
+<status status="PASS" start="2026-02-20T20:36:29.522283" elapsed="0.003003"/>
+</kw>
+<kw name="Should Not Contain" owner="BuiltIn">
+<arg>${title}</arg>
+<arg>${page_not_found_code}</arg>
+<doc>Fails if ``container`` contains ``item`` one or more times.</doc>
+<status status="PASS" start="2026-02-20T20:36:29.525286" elapsed="0.001002"/>
+</kw>
+<kw name="Should Not Contain" owner="BuiltIn">
+<arg>${title}</arg>
+<arg>${server_error_code}</arg>
+<doc>Fails if ``container`` contains ``item`` one or more times.</doc>
+<status status="PASS" start="2026-02-20T20:36:29.526288" elapsed="0.000000"/>
+</kw>
+<kw name="Should Not Be Empty" owner="BuiltIn">
+<msg time="2026-02-20T20:36:29.527285" level="INFO">Length is 6.</msg>
+<arg>${title}</arg>
+<doc>Verifies that the given item is not empty.</doc>
+<status status="PASS" start="2026-02-20T20:36:29.526288" elapsed="0.000997"/>
+</kw>
+<doc>Verify that no browser-level error page (such as 404, 500, or blank page) is displayed after launching the application.</doc>
+<status status="PASS" start="2026-02-20T20:36:29.521234" elapsed="0.006051"/>
+</kw>
+<kw name="Verify Home Page Loaded Successfully" owner="keywords">
+<kw name="Wait For Page To Load Completely" owner="keywords">
+<kw name="Get Config Value" owner="config.env_config.EnvConfig">
+<msg time="2026-02-20T20:36:29.527285" level="INFO">${timeout} = 15</msg>
+<var>${timeout}</var>
+<arg>MEDIUM_TIMEOUT</arg>
+<doc>Placeholder for config retrieval.</doc>
+<status status="PASS" start="2026-02-20T20:36:29.527285" elapsed="0.000998"/>
+</kw>
+<kw name="Wait Until Keyword Succeeds" owner="BuiltIn">
+<kw name="Page Should Be Ready" owner="keywords">
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2026-02-20T20:36:29.528283" level="INFO">Executing JavaScript:
+return document.readyState
+Without any arguments.</msg>
+<msg time="2026-02-20T20:36:29.532285" level="INFO">${state} = interactive</msg>
+<var>${state}</var>
+<arg>return document.readyState</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2026-02-20T20:36:29.528283" elapsed="0.004002"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<msg time="2026-02-20T20:36:29.532285" level="FAIL">interactive != complete</msg>
+<arg>${state}</arg>
+<arg>complete</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="FAIL" start="2026-02-20T20:36:29.532285" elapsed="0.001000">interactive != complete</status>
+</kw>
+<doc>Verify that the page has fully loaded by checking the document ready state.</doc>
+<status status="FAIL" start="2026-02-20T20:36:29.528283" elapsed="0.005002">interactive != complete</status>
+</kw>
+<kw name="Page Should Be Ready" owner="keywords">
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2026-02-20T20:36:44.534786" level="INFO">Executing JavaScript:
+return document.readyState
+Without any arguments.</msg>
+<msg time="2026-02-20T20:36:44.538318" level="INFO">${state} = complete</msg>
+<var>${state}</var>
+<arg>return document.readyState</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2026-02-20T20:36:44.534786" elapsed="0.003532"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${state}</arg>
+<arg>complete</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-02-20T20:36:44.538318" elapsed="0.000000"/>
+</kw>
+<doc>Verify that the page has fully loaded by checking the document ready state.</doc>
+<status status="PASS" start="2026-02-20T20:36:44.533778" elapsed="0.004540"/>
+</kw>
+<arg>3x</arg>
+<arg>${timeout}</arg>
+<arg>Page Should Be Ready</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<status status="PASS" start="2026-02-20T20:36:29.528283" elapsed="15.010035"/>
+</kw>
+<doc>Wait until the page has fully loaded by checking the document ready state.</doc>
+<status status="PASS" start="2026-02-20T20:36:29.527285" elapsed="15.011033"/>
+</kw>
+<kw name="Get Config Value" owner="config.env_config.EnvConfig">
+<msg time="2026-02-20T20:36:44.538318" level="INFO">${timeout} = 20</msg>
+<var>${timeout}</var>
+<arg>LONG_TIMEOUT</arg>
+<doc>Placeholder for config retrieval.</doc>
+<status status="PASS" start="2026-02-20T20:36:44.538318" elapsed="0.000000"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>${HOME_PAGE_LOGO}</arg>
+<arg>${timeout}</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-02-20T20:36:44.538318" elapsed="0.016647"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>${HOME_PAGE_SEARCH_BAR}</arg>
+<arg>${timeout}</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-02-20T20:36:44.554965" elapsed="0.010565"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>${HOME_SEARCH_BUTTON}</arg>
+<arg>${timeout}</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-02-20T20:36:44.565530" elapsed="0.010853"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>${HOME_PAGE_MAIN_CONTAINER}</arg>
+<arg>${timeout}</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-02-20T20:36:44.576383" elapsed="0.006779"/>
+</kw>
+<kw name="Capture Page Screenshot" owner="SeleniumLibrary">
+<msg time="2026-02-20T20:36:44.700287" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="Verify_Application_Launch.png"&gt;&lt;img src="Verify_Application_Launch.png" width="800px"&gt;&lt;/a&gt;</msg>
+<arg>Verify_Application_Launch.png</arg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2026-02-20T20:36:44.583162" elapsed="0.117125"/>
+</kw>
+<doc>Verify that the Home page of the MoRent application has loaded successfully by checking for key elements.</doc>
+<status status="PASS" start="2026-02-20T20:36:29.527285" elapsed="15.173002"/>
+</kw>
+<kw name="Verify Page Readiness" owner="keywords">
+<kw name="Wait For Page To Load Completely" owner="keywords">
+<kw name="Get Config Value" owner="config.env_config.EnvConfig">
+<msg time="2026-02-20T20:36:44.701287" level="INFO">${timeout} = 15</msg>
+<var>${timeout}</var>
+<arg>MEDIUM_TIMEOUT</arg>
+<doc>Placeholder for config retrieval.</doc>
+<status status="PASS" start="2026-02-20T20:36:44.701287" elapsed="0.000000"/>
+</kw>
+<kw name="Wait Until Keyword Succeeds" owner="BuiltIn">
+<kw name="Page Should Be Ready" owner="keywords">
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2026-02-20T20:36:44.702305" level="INFO">Executing JavaScript:
+return document.readyState
+Without any arguments.</msg>
+<msg time="2026-02-20T20:36:44.705346" level="INFO">${state} = complete</msg>
+<var>${state}</var>
+<arg>return document.readyState</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2026-02-20T20:36:44.702305" elapsed="0.003041"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${state}</arg>
+<arg>complete</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-02-20T20:36:44.705346" elapsed="0.000000"/>
+</kw>
+<doc>Verify that the page has fully loaded by checking the document ready state.</doc>
+<status status="PASS" start="2026-02-20T20:36:44.701287" elapsed="0.004059"/>
+</kw>
+<arg>3x</arg>
+<arg>${timeout}</arg>
+<arg>Page Should Be Ready</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<status status="PASS" start="2026-02-20T20:36:44.701287" elapsed="0.004059"/>
+</kw>
+<doc>Wait until the page has fully loaded by checking the document ready state.</doc>
+<status status="PASS" start="2026-02-20T20:36:44.701287" elapsed="0.004059"/>
+</kw>
+<doc>Verify that the Home page is stable and ready for further interactions after loading.</doc>
+<status status="PASS" start="2026-02-20T20:36:44.700287" elapsed="0.005059"/>
+</kw>
+<kw name="Close All Browsers" owner="SeleniumLibrary" type="TEARDOWN">
+<doc>Closes all open browsers and resets the browser cache.</doc>
+<status status="PASS" start="2026-02-20T20:36:44.705346" elapsed="2.103604"/>
+</kw>
+<doc>Verify that the MoRent application launches successfully and the Home page loads without errors.
+Launch the MoRent website
+Wait for the page to load completely.
+Verify Application Load:
+Check that the website loads successfully in the browser.
+Ensure no browser-level error page (404, 500, or blank page) is displayed.
+Verify that the Home page main container is present.
+Verify Page Readiness:
+Ensure the Home page is stable and ready for further interactions.
+Expected Results:
+The MoRent website opens successfully.
+The Home page loads without any errors.
+The main Home page container is visible.
+The application is ready for further automated test execution.</doc>
+<tag>application_launch</tag>
+<tag>smoke</tag>
+<status status="PASS" start="2026-02-20T20:36:27.702679" elapsed="19.106271"/>
+</test>
+<doc>Automate the verification of the MoRent application launch to ensure that the website is accessible and the Home page loads successfully without any errors.</doc>
+<status status="PASS" start="2026-02-20T20:36:27.567352" elapsed="19.241598"/>
+</suite>
+<status status="PASS" start="2026-02-20T20:36:27.551645" elapsed="19.259183"/>
+</suite>
+<status status="PASS" start="2026-02-20T20:36:27.535969" elapsed="19.274859"/>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="1" fail="0" skip="0">application_launch</stat>
+<stat pass="1" fail="0" skip="0">smoke</stat>
+</tag>
+<suite>
+<stat name="Tests" id="s1" pass="1" fail="0" skip="0">Tests</stat>
+<stat name="Smoke" id="s1-s1" pass="1" fail="0" skip="0">Tests.Smoke</stat>
+<stat name="App Launch Tests" id="s1-s1-s1" pass="1" fail="0" skip="0">Tests.Smoke.App Launch Tests</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
