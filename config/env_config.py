@@ -7,6 +7,17 @@ class EnvConfig:
     
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
 
-    def get_config_value(self):
+    # Application Config
+    BASE_URL = "https://morent-car.archisacademy.com/"
+    BROWSER = "chrome"
+    SHORT_TIMEOUT = 5
+    MEDIUM_TIMEOUT = 15
+    LONG_TIMEOUT= 20
+
+    # Test Data
+    PAGE_NOT_FOUND_CODE = "404"
+    SERVER_ERROR_CODE = "500"
+    
+    def get_config_value(self, key):
         """Placeholder for config retrieval."""
-        pass
+        return getattr(self, key, None) 
