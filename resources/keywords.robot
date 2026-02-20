@@ -28,7 +28,7 @@ Verify Home Page Loaded Successfully
     Wait Until Element Is Visible    ${HOME_PAGE_SEARCH_BAR}    ${timeout}
     Wait Until Element Is Visible    ${HOME_SEARCH_BUTTON}    ${timeout}
     Wait Until Element Is Visible    ${HOME_PAGE_MAIN_CONTAINER}    ${timeout}
-    Capture Page Screenshot    Verify_Application_Launch.png
+    Capture Page Screenshot    ${TEST NAME}.png
       
 Verify No Browser Error
     [Documentation]    Verify that no browser-level error page (such as 404, 500, or blank page) is displayed after launching the application.
@@ -47,4 +47,5 @@ Page Should Be Ready
 Wait For Page To Load Completely
     [Documentation]    Wait until the page has fully loaded by checking the document ready state.
     ${timeout}=    Get Config Value    MEDIUM_TIMEOUT
-    Wait Until Keyword Succeeds    3x    ${timeout}    Page Should Be Ready
+    ${retry_count}=    Get Config Value    RETRY_COUNT 
+    Wait Until Keyword Succeeds    ${retry_count}    ${timeout}    Page Should Be Ready
