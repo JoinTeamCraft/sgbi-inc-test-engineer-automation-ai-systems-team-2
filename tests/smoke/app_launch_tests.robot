@@ -23,7 +23,6 @@ SG-1 Verify Application Launch
 
     [Tags]    smoke    application_launch
     Open MoRent Application
-    Wait For Page To Load Completely
     Verify No Browser Error
     Verify Home Page Loaded Successfully
     

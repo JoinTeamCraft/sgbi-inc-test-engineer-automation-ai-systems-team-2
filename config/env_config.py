@@ -12,7 +12,8 @@ class EnvConfig:
     BROWSER = "chrome"
     SHORT_TIMEOUT = 5
     MEDIUM_TIMEOUT = 15
-    LONG_TIMEOUT= 20
+    LONG_TIMEOUT = 20
+    RETRY_COUNT = "3x"
 
     # Test Data
     PAGE_NOT_FOUND_CODE = "404"

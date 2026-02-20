@@ -17,3 +17,7 @@ venv/
 
 # VS Code
 .vscode/
+
+# Compressed files
+*.zip
+*.tar.gz
