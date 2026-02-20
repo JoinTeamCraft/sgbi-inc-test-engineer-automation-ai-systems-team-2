@@ -49,7 +49,5 @@ Page Should Be Ready
 Wait For Page To Load Completely
     [Documentation]    Wait until the page has fully loaded by checking the document ready state.
     ${timeout}=    Get Config Value    MEDIUM_TIMEOUT
-    ${retry_count}=    Get Config Value    RETRY_COUNT 
+    ${retry_count}=    Get Config Value    RETRY_COUNT
     Wait Until Keyword Succeeds    ${retry_count}    ${timeout}    Page Should Be Ready
-
-    

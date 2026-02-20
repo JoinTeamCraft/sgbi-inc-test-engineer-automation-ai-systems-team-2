@@ -25,4 +25,3 @@ SG-1 Verify Application Launch
     Open MoRent Application
     Verify No Browser Error
     Verify Home Page Loaded Successfully
-    
