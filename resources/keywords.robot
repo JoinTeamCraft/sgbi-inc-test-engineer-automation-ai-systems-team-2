@@ -1,6 +1,7 @@
 *** Settings ***
 Documentation     Template for reusable keywords
 Library           SeleniumLibrary
+Library           String
 Resource          locators.robot
 Library    config.env_config.EnvConfig
 
@@ -28,7 +29,8 @@ Verify Home Page Loaded Successfully
     Wait Until Element Is Visible    ${HOME_PAGE_SEARCH_BAR}    ${timeout}
     Wait Until Element Is Visible    ${HOME_SEARCH_BUTTON}    ${timeout}
     Wait Until Element Is Visible    ${HOME_PAGE_MAIN_CONTAINER}    ${timeout}
-    Capture Page Screenshot    ${TEST NAME}.png
+    ${screenshot_name}=    Replace String    ${TEST NAME}    ${SPACE}    _
+    Capture Page Screenshot    ${screenshot_name}.png
       
 Verify No Browser Error
     [Documentation]    Verify that no browser-level error page (such as 404, 500, or blank page) is displayed after launching the application.
@@ -49,3 +51,5 @@ Wait For Page To Load Completely
     ${timeout}=    Get Config Value    MEDIUM_TIMEOUT
     ${retry_count}=    Get Config Value    RETRY_COUNT 
     Wait Until Keyword Succeeds    ${retry_count}    ${timeout}    Page Should Be Ready
+
+    
