@@ -20,4 +20,4 @@ class EnvConfig:
     
     def get_config_value(self, key):
         """Placeholder for config retrieval."""
-        return getattr(self, key, None) 
+        return getattr(self, key)

@@ -48,7 +48,3 @@ Wait For Page To Load Completely
     [Documentation]    Wait until the page has fully loaded by checking the document ready state.
     ${timeout}=    Get Config Value    MEDIUM_TIMEOUT
     Wait Until Keyword Succeeds    3x    ${timeout}    Page Should Be Ready
-
-Verify Page Readiness
-    [Documentation]    Verify that the Home page is stable and ready for further interactions after loading.
-    Wait For Page To Load Completely
