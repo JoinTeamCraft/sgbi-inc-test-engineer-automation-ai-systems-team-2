@@ -51,3 +51,61 @@ Wait For Page To Load Completely
     ${timeout}=    Get Config Value    MEDIUM_TIMEOUT
     ${retry_count}=    Get Config Value    RETRY_COUNT
     Wait Until Keyword Succeeds    ${retry_count}    ${timeout}    Page Should Be Ready
+
+Verify Header Section Is Visible
+    [Documentation]    Verify that the Header section is visible on the Home page.
+    Element Should Be Visible    ${HEADER_SECTION}
+    ${header_sec}=    Get Config Value    HEADER_SECTION_SCREENSHOT
+    ${screenshot_name}=    Replace String    ${TEST NAME}    ${SPACE}    _
+    Capture Page Screenshot    ${screenshot_name}_${header_sec}
+    
+Verify Application Logo Is Visible
+    [Documentation]    Verify that the application logo is visible in the Header section.
+    Element Should Be Visible    ${HOME_PAGE_LOGO}
+
+Verify Home Page Search Bar Is Visible
+    [Documentation]    Verify that the search bar is visible on the Home page.
+    Element Should Be Visible    ${HOME_PAGE_SEARCH_BAR}
+
+Verify Navigation Clickability Of Header Elements
+    [Documentation]    Click each navigation item and verify redirection
+    ${screenshot_name}=    Replace String    ${TEST NAME}    ${SPACE}    _
+    ${fav_screenshot}=    Get Config Value    FAVOURITE_NAVIGATION_SCREENSHOT
+    ${orders_screenshot}=    Get Config Value    ORDERS_NAVIGATION_SCREENSHOT
+    ${settings_screenshot}=    Get Config Value    SETTINGS_NAVIGATION_SCREENSHOT
+    ${sign_in_screenshot}=    Get Config Value    SIGN_IN_NAVIGATION_SCREENSHOT
+    ${fav_path}=    Get Config Value    FAVORITES_PATH
+    ${orders_path}=    Get Config Value    ORDERS_PATH
+    ${sign_text}=    Get Config Value    SIGN_IN_PAGE_TEXT
+    ${sign_title}=    Get Config Value    SIGN_IN_PAGE_TITLE
+
+    Verify Navigation Redirection    ${FAVORITE_LINK}    ${EMPTY}    ${fav_path}    ${EMPTY}    ${screenshot_name}_${fav_screenshot}
+    Verify Navigation Redirection    ${ORDERS_LINK}      ${EMPTY}    ${orders_path}    ${EMPTY}    ${screenshot_name}_${orders_screenshot}
+    Verify Navigation Redirection    ${SIGN_IN_BUTTON}   ${sign_text}    ${EMPTY}    ${sign_title}    ${screenshot_name}_${sign_in_screenshot}
+    Verify Navigation Redirection    ${USER_SETTINGS_BUTTON}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${screenshot_name}_${settings_screenshot}
+
+Verify Navigation Redirection
+    [Arguments]    ${locator}    ${expected_text}=${EMPTY}    ${expected_url}=${EMPTY}    ${expected_title}=${EMPTY}    ${screenshot_name}=nav.png
+
+    ${timeout}=    Get Config Value    LONG_TIMEOUT
+    Wait Until Element Is Visible    ${locator}    ${timeout}
+    Wait Until Element Is Enabled    ${locator}    ${timeout}
+    Click Element    ${locator}
+
+    # Optional URL validation
+    IF    '${expected_url}' != ''
+        Wait Until Location Contains    ${expected_url}    ${timeout}
+    END
+
+    # Optional Page Text validation
+    IF    '${expected_text}' != ''
+        Wait Until Page Contains    ${expected_text}    ${timeout}
+    END
+
+    # Optional Page Title validation
+    IF    '${expected_title}' != ''
+        Title Should Be    ${expected_title}
+    END
+    Capture Page Screenshot    ${screenshot_name}
+    Go Back
+    Wait For Page To Load Completely
