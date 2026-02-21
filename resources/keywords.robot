@@ -1,126 +1,139 @@
 *** Settings ***
-Library    SeleniumLibrary
+Documentation     Template for reusable keywords
+Library           SeleniumLibrary
+Library           String
+Resource          locators.robot
+Library    config.env_config.EnvConfig
+
+
 
 *** Keywords ***
-# ============ Sign In Keywords ============
-Click Sign In Button
-    [Documentation]    Click the Sign in button on the home page
-    Wait Until Element Is Visible    //button[text()='Sign in']    timeout=10s
-    Sleep    1s
-    Click Element    //button[text()='Sign in']
-    Wait Until Page Contains    Sign in to Morent    timeout=10s
-    Sleep    2s
+# Add your common keywords here
+Example Keyword
+    [Documentation]    Placeholder for a keyword
+    No Operation
 
-Click Sign Up Link
-    [Documentation]    Click the Sign up link on sign in page
-    Wait Until Element Is Visible    //a[contains(text(),'Sign up')]    timeout=10s
-    Sleep    1s
-    Click Element    //a[contains(text(),'Sign up')]
-    Wait Until Page Contains    Create your account    timeout=15s
-    Sleep    3s
+Open MoRent Application
+    [Documentation]    Open the MoRent application in the browser and maximize the window.
+    ${url}=    Get Config Value    BASE_URL
+    ${browser}=    Get Config Value    BROWSER
+    ${timeout}=    Get Config Value    LONG_TIMEOUT
+    Open Browser    ${url}    ${browser}
+    Maximize Browser Window
 
-# ============ Account Creation Keywords ============
-Enter First Name
-    [Arguments]    ${first_name}
-    [Documentation]    Enter first name in account creation form
-    Wait Until Element Is Visible    //input[@id='firstName-field']    timeout=10s
-    Sleep    1s
-    Click Element    //input[@id='firstName-field']
-    Sleep    0.5s
-    Input Text    //input[@id='firstName-field']    ${first_name}
-    Sleep    1s
+Verify Home Page Loaded Successfully
+    [Documentation]    Verify that the Home page of the MoRent application has loaded successfully by checking for key elements.
+    Wait For Page To Load Completely
+    ${timeout}=    Get Config Value    LONG_TIMEOUT
+    Wait Until Element Is Visible    ${HOME_PAGE_LOGO}    ${timeout}
+    Wait Until Element Is Visible    ${HOME_PAGE_SEARCH_BAR}    ${timeout}
+    Wait Until Element Is Visible    ${HOME_SEARCH_BUTTON}    ${timeout}
+    Wait Until Element Is Visible    ${HOME_PAGE_MAIN_CONTAINER}    ${timeout}
+    ${screenshot_name}=    Replace String    ${TEST NAME}    ${SPACE}    _
+    Capture Page Screenshot    ${screenshot_name}.png
+      
+Verify No Browser Error
+    [Documentation]    Verify that no browser-level error page (such as 404, 500, or blank page) is displayed after launching the application.
+    ${page_not_found_code}=    Get Config Value    PAGE_NOT_FOUND_CODE
+    ${server_error_code}=    Get Config Value    SERVER_ERROR_CODE
+    ${title}=    Get Title
+    Should Not Contain    ${title}    ${page_not_found_code}
+    Should Not Contain    ${title}    ${server_error_code}
+    Should Not Be Empty    ${title}
 
-Enter Last Name
-    [Arguments]    ${last_name}
-    [Documentation]    Enter last name in account creation form
-    Wait Until Element Is Visible    //input[@id='lastName-field']    timeout=10s
-    Sleep    1s
-    Click Element    //input[@id='lastName-field']
-    Sleep    0.5s
-    Input Text    //input[@id='lastName-field']    ${last_name}
-    Sleep    1s
+Page Should Be Ready
+    [Documentation]    Verify that the page has fully loaded by checking the document ready state.
+    ${state}=    Execute Javascript    return document.readyState
+    Should Be Equal    ${state}    complete
 
-Enter Email For Account Creation
-    [Arguments]    ${email}
-    [Documentation]    Enter email address in account creation form
-    Wait Until Element Is Visible    //input[@id='emailAddress-field']    timeout=10s
-    Sleep    1s
-    Click Element    //input[@id='emailAddress-field']
-    Sleep    0.5s
-    Input Text    //input[@id='emailAddress-field']    ${email}
-    Sleep    1s
+Wait For Page To Load Completely
+    [Documentation]    Wait until the page has fully loaded by checking the document ready state.
+    ${timeout}=    Get Config Value    MEDIUM_TIMEOUT
+    ${retry_count}=    Get Config Value    RETRY_COUNT
+    Wait Until Keyword Succeeds    ${retry_count}    ${timeout}    Page Should Be Ready
 
-Enter Password
-    [Arguments]    ${password}
-    [Documentation]    Enter password in account creation form
-    Wait Until Element Is Visible    //input[@id='password-field']    timeout=10s
-    Sleep    1s
-    Click Element    //input[@id='password-field']
-    Sleep    0.5s
-    Input Text    //input[@id='password-field']    ${password}
-    Sleep    1s
+Verify Header Section Is Visible
+    [Documentation]    Verify that the Header section is visible on the Home page.
+    Element Should Be Visible    ${HEADER_SECTION}
+    ${header_sec}=    Get Config Value    HEADER_SECTION_SCREENSHOT
+    ${screenshot_name}=    Replace String    ${TEST NAME}    ${SPACE}    _
+    Capture Page Screenshot    ${screenshot_name}_${header_sec}
+    
+Verify Application Logo Is Visible
+    [Documentation]    Verify that the application logo is visible in the Header section.
+    Element Should Be Visible    ${HOME_PAGE_LOGO}
 
-Click Create Account Continue Button
-    [Documentation]    Click Continue button on account creation page
-    Wait Until Element Is Visible    //button[.//span[text()='Continue']]    timeout=10s
-    Sleep    2s
-    Click Element    //button[.//span[text()='Continue']]
-    Sleep    3s
+Verify Home Page Search Bar Is Visible
+    [Documentation]    Verify that the search bar is visible on the Home page.
+    Element Should Be Visible    ${HOME_PAGE_SEARCH_BAR}
 
-# ============ Email Verification Keywords ============
-Verify Email Verification Page Is Displayed
-    [Documentation]    Verify that the email verification page is displayed
-    Wait Until Page Contains    Verify your email    timeout=15s
-    Wait Until Element Is Visible    //h1[contains(text(), 'Verify your email')]    timeout=10s
-    Page Should Contain Element    //h1[contains(text(), 'Verify your email')]
-    Sleep    2s
+Verify Favorite Icon Is Visible
+    [Documentation]    Verify that the Favorite icon is visible in the Header section.
+    Element Should Be Visible    ${FAVORITE_LINK}
 
-Verify Email Verification Modal Elements
-    [Documentation]    Verify the presence of verification code input fields
-    Wait Until Element Is Visible    //input[@maxlength='1']    timeout=15s
-    Element Should Be Visible    //input[@maxlength='1']
-    Wait Until Page Contains Element    //button[.//span[text()='Continue']]    timeout=10s
-    Page Should Contain Element    //button[.//span[text()='Continue']]
-    Log    Email verification modal with code input fields is visible    INFO
+Verify Orders Icon Is Visible
+    [Documentation]    Verify that the Orders icon is visible in the Header section.
+    Element Should Be Visible    ${ORDERS_LINK}
 
-# ============ Profile/Account Settings Keywords ============
-Navigate To Account Settings
-    [Documentation]    Navigate to Account Settings from the profile menu
-    Wait Until Element Is Visible    //button[contains(@aria-label, 'Account')]    timeout=10s
-    Sleep    1s
-    Click Element    //button[contains(@aria-label, 'Account')]
-    Sleep    2s
-    Wait Until Element Is Visible    //a[contains(text(), 'Settings')]    timeout=10s
-    Click Element    //a[contains(text(), 'Settings')]
-    Wait Until Page Contains    Settings    timeout=10s
-    Sleep    2s
+Verify Settings Button Is Visible
+    [Documentation]    Verify that the User Settings button is visible in the Header section.
+    Element Should Be Visible    ${USER_SETTINGS_BUTTON}
 
-Click Add Email Button
-    [Documentation]    Click on Add email button in account settings
-    Wait Until Element Is Visible    //button[contains(text(), 'Add email')]    timeout=10s
-    Sleep    1s
-    Click Element    //button[contains(text(), 'Add email')]
-    Wait Until Page Contains    Add email address    timeout=10s
-    Sleep    2s
+Verify Sign In Button Is Visible
+    [Documentation]    Verify that the Sign In button is visible in the Header section.
+    Element Should Be Visible    ${SIGN_IN_BUTTON}
 
-Enter New Email Address
-    [Arguments]    ${email}
-    [Documentation]    Enter new email address to be added
-    Wait Until Element Is Visible    //input[@placeholder='Enter new email address']    timeout=10s
-    Sleep    1s
-    Click Element    //input[@placeholder='Enter new email address']
-    Sleep    0.5s
-    Input Text    //input[@placeholder='Enter new email address']    ${email}
-    Sleep    1s
+Verify Navigation Clickability
+    [Documentation]    Click each navigation item and verify URL redirection
+    
+    ${timeout}=    Get Config Value    LONG_TIMEOUT
+    ${screenshot_name}=    Replace String    ${TEST NAME}    ${SPACE}    _
 
-Click Add Email Submit Button
-    [Documentation]    Click the Add button to submit new email
-    Wait Until Element Is Visible    //button[.//span[text()='Add']]    timeout=10s
-    Sleep    1s
-    Click Element    //button[.//span[text()='Add']]
-    Sleep    3s
+    # Sign In
+    Wait Until Element Is Visible    ${SIGN_IN_BUTTON}    ${timeout}
+    Wait Until Element Is Enabled    ${SIGN_IN_BUTTON}    ${timeout}
+    Click Element    ${SIGN_IN_BUTTON}
+    ${sign_in_text}=    Get Config Value    SIGN_IN_PAGE_TEXT
+    Wait Until Page Contains    ${sign_in_text}    ${timeout}
+    ${sign_in_page_title}=    Get Config Value    SIGN_IN_PAGE_TITLE
+    Title Should Be    ${sign_in_page_title}
+    ${sign_in_screenshot}=    Get Config Value    SIGN_IN_NAVIGATION_SCREENSHOT
+    Capture Page Screenshot    ${screenshot_name}_${sign_in_screenshot}
+    Go Back
+    Wait For Page To Load Completely
 
-Wait Until Page Load Is Complete
-    [Documentation]    Wait for page to load completely
-    Wait Until Element Is Visible    //body    timeout=10s
-    Sleep    2s
+    # Favorites
+    Wait Until Element Is Visible    ${FAVORITE_LINK}    ${timeout}
+    Wait Until Element Is Enabled    ${FAVORITE_LINK}    ${timeout}
+    Click Element    ${FAVORITE_LINK}
+    ${fav_url}=    Get Config Value    FAVORITES_URL
+    Wait Until Location Contains    ${fav_url}    ${timeout}
+    ${fav_screenshot}=    Get Config Value    FAVOURITE_NAVIGATION_SCREENSHOT    
+    Capture Page Screenshot    ${screenshot_name}_${fav_screenshot}
+    Go Back
+    Wait For Page To Load Completely
+
+    # Orders
+    Wait Until Element Is Visible    ${ORDERS_LINK}    ${timeout}
+    Wait Until Element Is Enabled    ${ORDERS_LINK}    ${timeout}
+    Click Element    ${ORDERS_LINK}
+    ${orders_url}=    Get Config Value    ORDERS_URL
+    Wait Until Location Contains    ${orders_url}    ${timeout}
+    ${orders_screenshot}=    Get Config Value    ORDERS_NAVIGATION_SCREENSHOT
+    Capture Page Screenshot    ${screenshot_name}_${orders_screenshot}    
+    Go Back
+    Wait For Page To Load Completely
+
+    # Settings
+    Wait Until Element Is Visible    ${USER_SETTINGS_BUTTON}    ${timeout}    
+    Wait Until Element Is Enabled    ${USER_SETTINGS_BUTTON}    ${timeout}
+    Click Element    ${USER_SETTINGS_BUTTON}
+    # Assuming settings page has a unique URL or text to verify
+    # ${settings_url}=    Get Config Value    SETTINGS_URL
+    # Wait Until Location Contains    ${settings_url}    ${timeout}
+    # ${settings_page_text}=    Get Config Value    SETTINGS_PAGE_TEXT
+    # Wait Until Page Contains    ${settings_page_text}    ${timeout}
+    ${settings_screenshot}=    Get Config Value    SETTINGS_NAVIGATION_SCREENSHOT
+    Capture Page Screenshot    ${screenshot_name}_${settings_screenshot}
+    Go Back
+    Wait For Page To Load Completely
