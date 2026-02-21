@@ -113,7 +113,9 @@ Verify Favorites Navigation
     Wait Until Element Is Visible    ${FAVORITE_LINK}    ${timeout}
     Wait Until Element Is Enabled    ${FAVORITE_LINK}    ${timeout}
     Click Element    ${FAVORITE_LINK}
-    ${fav_url}=    Get Config Value    FAVORITES_URL
+    ${base_url}=    Get Config Value    BASE_URL
+    ${fav_path}=    Get Config Value    FAVORITES_PATH
+    ${fav_url}=    Set Variable    ${base_url}${fav_path}
     Wait Until Location Contains    ${fav_url}    ${timeout}
     ${fav_screenshot}=    Get Config Value    FAVOURITE_NAVIGATION_SCREENSHOT
     Capture Page Screenshot    ${screenshot_name}_${fav_screenshot}
@@ -125,7 +127,9 @@ Verify Orders Navigation
     Wait Until Element Is Visible    ${ORDERS_LINK}    ${timeout}
     Wait Until Element Is Enabled    ${ORDERS_LINK}    ${timeout}
     Click Element    ${ORDERS_LINK}
-    ${orders_url}=    Get Config Value    ORDERS_URL
+    ${base_url}=    Get Config Value    BASE_URL
+    ${orders_path}=    Get Config Value    ORDERS_PATH
+    ${orders_url}=    Set Variable    ${base_url}${orders_path}
     Wait Until Location Contains    ${orders_url}    ${timeout}
     ${orders_screenshot}=    Get Config Value    ORDERS_NAVIGATION_SCREENSHOT
     Capture Page Screenshot    ${screenshot_name}_${orders_screenshot}

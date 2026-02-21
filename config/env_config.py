@@ -26,8 +26,8 @@ class EnvConfig:
     SIGN_IN_NAVIGATION_SCREENSHOT = "Sign_In_Navigation.png"
 
     # Navigation Config
-    FAVORITES_URL = "https://morent-car.archisacademy.com/favourites"
-    ORDERS_URL = "https://morent-car.archisacademy.com/orders"
+    FAVORITES_PATH = "favourites"
+    ORDERS_PATH = "orders"
     SIGN_IN_PAGE_TITLE = "My account | Morent"
     
     def get_config_value(self, key):
