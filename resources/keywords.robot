@@ -51,3 +51,89 @@ Wait For Page To Load Completely
     ${timeout}=    Get Config Value    MEDIUM_TIMEOUT
     ${retry_count}=    Get Config Value    RETRY_COUNT
     Wait Until Keyword Succeeds    ${retry_count}    ${timeout}    Page Should Be Ready
+
+Verify Header Section Is Visible
+    [Documentation]    Verify that the Header section is visible on the Home page.
+    Element Should Be Visible    ${HEADER_SECTION}
+    ${header_sec}=    Get Config Value    HEADER_SECTION_SCREENSHOT
+    ${screenshot_name}=    Replace String    ${TEST NAME}    ${SPACE}    _
+    Capture Page Screenshot    ${screenshot_name}_${header_sec}
+    
+Verify Application Logo Is Visible
+    [Documentation]    Verify that the application logo is visible in the Header section.
+    Element Should Be Visible    ${HOME_PAGE_LOGO}
+
+Verify Home Page Search Bar Is Visible
+    [Documentation]    Verify that the search bar is visible on the Home page.
+    Element Should Be Visible    ${HOME_PAGE_SEARCH_BAR}
+
+Verify Favorite Icon Is Visible
+    [Documentation]    Verify that the Favorite icon is visible in the Header section.
+    Element Should Be Visible    ${FAVORITE_LINK}
+
+Verify Orders Icon Is Visible
+    [Documentation]    Verify that the Orders icon is visible in the Header section.
+    Element Should Be Visible    ${ORDERS_LINK}
+
+Verify Settings Button Is Visible
+    [Documentation]    Verify that the User Settings button is visible in the Header section.
+    Element Should Be Visible    ${USER_SETTINGS_BUTTON}
+
+Verify Sign In Button Is Visible
+    [Documentation]    Verify that the Sign In button is visible in the Header section.
+    Element Should Be Visible    ${SIGN_IN_BUTTON}
+
+Verify Navigation Clickability
+    [Documentation]    Click each navigation item and verify URL redirection
+    
+    ${timeout}=    Get Config Value    LONG_TIMEOUT
+    ${screenshot_name}=    Replace String    ${TEST NAME}    ${SPACE}    _
+
+    # Sign In
+    Wait Until Element Is Visible    ${SIGN_IN_BUTTON}    ${timeout}
+    Wait Until Element Is Enabled    ${SIGN_IN_BUTTON}    ${timeout}
+    Click Element    ${SIGN_IN_BUTTON}
+    ${sign_in_text}=    Get Config Value    SIGN_IN_PAGE_TEXT
+    Wait Until Page Contains    ${sign_in_text}    ${timeout}
+    ${sign_in_page_title}=    Get Config Value    SIGN_IN_PAGE_TITLE
+    Title Should Be    ${sign_in_page_title}
+    ${sign_in_screenshot}=    Get Config Value    SIGN_IN_NAVIGATION_SCREENSHOT
+    Capture Page Screenshot    ${screenshot_name}_${sign_in_screenshot}
+    Go Back
+    Wait For Page To Load Completely
+
+    # Favorites
+    Wait Until Element Is Visible    ${FAVORITE_LINK}    ${timeout}
+    Wait Until Element Is Enabled    ${FAVORITE_LINK}    ${timeout}
+    Click Element    ${FAVORITE_LINK}
+    ${fav_url}=    Get Config Value    FAVORITES_URL
+    Wait Until Location Contains    ${fav_url}    ${timeout}
+    ${fav_screenshot}=    Get Config Value    FAVOURITE_NAVIGATION_SCREENSHOT    
+    Capture Page Screenshot    ${screenshot_name}_${fav_screenshot}
+    Go Back
+    Wait For Page To Load Completely
+
+    # Orders
+    Wait Until Element Is Visible    ${ORDERS_LINK}    ${timeout}
+    Wait Until Element Is Enabled    ${ORDERS_LINK}    ${timeout}
+    Click Element    ${ORDERS_LINK}
+    ${orders_url}=    Get Config Value    ORDERS_URL
+    Wait Until Location Contains    ${orders_url}    ${timeout}
+    ${orders_screenshot}=    Get Config Value    ORDERS_NAVIGATION_SCREENSHOT
+    Capture Page Screenshot    ${screenshot_name}_${orders_screenshot}    
+    Go Back
+    Wait For Page To Load Completely
+
+    # Settings
+    Wait Until Element Is Visible    ${USER_SETTINGS_BUTTON}    ${timeout}    
+    Wait Until Element Is Enabled    ${USER_SETTINGS_BUTTON}    ${timeout}
+    Click Element    ${USER_SETTINGS_BUTTON}
+    # Assuming settings page has a unique URL or text to verify
+    # ${settings_url}=    Get Config Value    SETTINGS_URL
+    # Wait Until Location Contains    ${settings_url}    ${timeout}
+    # ${settings_page_text}=    Get Config Value    SETTINGS_PAGE_TEXT
+    # Wait Until Page Contains    ${settings_page_text}    ${timeout}
+    ${settings_screenshot}=    Get Config Value    SETTINGS_NAVIGATION_SCREENSHOT
+    Capture Page Screenshot    ${screenshot_name}_${settings_screenshot}
+    Go Back
+    Wait For Page To Load Completely
