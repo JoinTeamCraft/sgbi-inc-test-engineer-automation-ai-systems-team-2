@@ -1,0 +1,655 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 6.1.1 (Python 3.11.9 on darwin)" generated="20260221 20:48:42.446" rpa="false" schemaversion="4">
+<suite id="s1" name="Tests" source="/Users/vishnumk/Desktop/sgbi-inc-test-engineer-automation-ai-systems-team-2/tests">
+<suite id="s1-s1" name="Auth" source="/Users/vishnumk/Desktop/sgbi-inc-test-engineer-automation-ai-systems-team-2/tests/auth">
+<suite id="s1-s1-s1" name="Login Tests" source="/Users/vishnumk/Desktop/sgbi-inc-test-engineer-automation-ai-systems-team-2/tests/auth/login_tests.robot">
+<test id="s1-s1-s1-t1" name="Login Test Template" line="7">
+<kw name="Log" library="BuiltIn">
+<arg>Implement login test here</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260221 20:48:42.578" level="INFO">Implement login test here</msg>
+<status status="PASS" starttime="20260221 20:48:42.578" endtime="20260221 20:48:42.579"/>
+</kw>
+<doc>Placeholder for login test</doc>
+<tag>auth</tag>
+<status status="PASS" starttime="20260221 20:48:42.578" endtime="20260221 20:48:42.579"/>
+</test>
+<doc>Template for Auth tests</doc>
+<status status="PASS" starttime="20260221 20:48:42.466" endtime="20260221 20:48:42.579"/>
+</suite>
+<status status="PASS" starttime="20260221 20:48:42.465" endtime="20260221 20:48:42.579"/>
+</suite>
+<suite id="s1-s2" name="Booking" source="/Users/vishnumk/Desktop/sgbi-inc-test-engineer-automation-ai-systems-team-2/tests/booking">
+<suite id="s1-s2-s1" name="Booking Tests" source="/Users/vishnumk/Desktop/sgbi-inc-test-engineer-automation-ai-systems-team-2/tests/booking/booking_tests.robot">
+<test id="s1-s2-s1-t1" name="Booking Test Template" line="7">
+<kw name="Log" library="BuiltIn">
+<arg>Implement booking test here</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260221 20:48:42.584" level="INFO">Implement booking test here</msg>
+<status status="PASS" starttime="20260221 20:48:42.584" endtime="20260221 20:48:42.584"/>
+</kw>
+<doc>Placeholder for booking test</doc>
+<tag>booking</tag>
+<status status="PASS" starttime="20260221 20:48:42.583" endtime="20260221 20:48:42.584"/>
+</test>
+<doc>Template for Booking tests</doc>
+<status status="PASS" starttime="20260221 20:48:42.581" endtime="20260221 20:48:42.584"/>
+</suite>
+<status status="PASS" starttime="20260221 20:48:42.580" endtime="20260221 20:48:42.585"/>
+</suite>
+<suite id="s1-s3" name="Home" source="/Users/vishnumk/Desktop/sgbi-inc-test-engineer-automation-ai-systems-team-2/tests/home">
+<suite id="s1-s3-s1" name="Rent Now Navigation Tests" source="/Users/vishnumk/Desktop/sgbi-inc-test-engineer-automation-ai-systems-team-2/tests/home/rent_now_navigation_tests.robot">
+<test id="s1-s3-s1-t1" name="SG-25 Verify Rent Now Button Navigation from Home Page Car Card" line="8">
+<kw name="Open MoRent Application" library="keywords">
+<doc>Open the MoRent application in the browser and maximize the window.</doc>
+<kw name="Get Config Value" library="config.env_config.EnvConfig">
+<var>${url}</var>
+<arg>BASE_URL</arg>
+<doc>Get configuration value by key.</doc>
+<msg timestamp="20260221 20:48:42.590" level="INFO">${url} = https://morent-car.archisacademy.com/</msg>
+<status status="PASS" starttime="20260221 20:48:42.589" endtime="20260221 20:48:42.590"/>
+</kw>
+<kw name="Get Config Value" library="config.env_config.EnvConfig">
+<var>${browser}</var>
+<arg>BROWSER</arg>
+<doc>Get configuration value by key.</doc>
+<msg timestamp="20260221 20:48:42.590" level="INFO">${browser} = chrome</msg>
+<status status="PASS" starttime="20260221 20:48:42.590" endtime="20260221 20:48:42.590"/>
+</kw>
+<kw name="Get Config Value" library="config.env_config.EnvConfig">
+<var>${timeout}</var>
+<arg>LONG_TIMEOUT</arg>
+<doc>Get configuration value by key.</doc>
+<msg timestamp="20260221 20:48:42.590" level="INFO">${timeout} = 20</msg>
+<status status="PASS" starttime="20260221 20:48:42.590" endtime="20260221 20:48:42.590"/>
+</kw>
+<kw name="Open Browser" library="SeleniumLibrary">
+<arg>${url}</arg>
+<arg>${browser}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<msg timestamp="20260221 20:48:42.590" level="INFO">Opening browser 'chrome' to base url 'https://morent-car.archisacademy.com/'.</msg>
+<status status="PASS" starttime="20260221 20:48:42.590" endtime="20260221 20:48:45.237"/>
+</kw>
+<kw name="Maximize Browser Window" library="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" starttime="20260221 20:48:45.238" endtime="20260221 20:48:45.619"/>
+</kw>
+<status status="PASS" starttime="20260221 20:48:42.589" endtime="20260221 20:48:45.619"/>
+</kw>
+<kw name="Verify No Browser Error" library="keywords">
+<doc>Verify that no browser-level error page (such as 404, 500, or blank page) is displayed after launching the application.</doc>
+<kw name="Get Config Value" library="config.env_config.EnvConfig">
+<var>${page_not_found_code}</var>
+<arg>PAGE_NOT_FOUND_CODE</arg>
+<doc>Get configuration value by key.</doc>
+<msg timestamp="20260221 20:48:45.620" level="INFO">${page_not_found_code} = 404</msg>
+<status status="PASS" starttime="20260221 20:48:45.620" endtime="20260221 20:48:45.620"/>
+</kw>
+<kw name="Get Config Value" library="config.env_config.EnvConfig">
+<var>${server_error_code}</var>
+<arg>SERVER_ERROR_CODE</arg>
+<doc>Get configuration value by key.</doc>
+<msg timestamp="20260221 20:48:45.620" level="INFO">${server_error_code} = 500</msg>
+<status status="PASS" starttime="20260221 20:48:45.620" endtime="20260221 20:48:45.620"/>
+</kw>
+<kw name="Get Title" library="SeleniumLibrary">
+<var>${title}</var>
+<doc>Returns the title of the current page.</doc>
+<msg timestamp="20260221 20:48:45.633" level="INFO">${title} = Morent</msg>
+<status status="PASS" starttime="20260221 20:48:45.620" endtime="20260221 20:48:45.633"/>
+</kw>
+<kw name="Should Not Contain" library="BuiltIn">
+<arg>${title}</arg>
+<arg>${page_not_found_code}</arg>
+<doc>Fails if ``container`` contains ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260221 20:48:45.633" endtime="20260221 20:48:45.633"/>
+</kw>
+<kw name="Should Not Contain" library="BuiltIn">
+<arg>${title}</arg>
+<arg>${server_error_code}</arg>
+<doc>Fails if ``container`` contains ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260221 20:48:45.633" endtime="20260221 20:48:45.633"/>
+</kw>
+<kw name="Should Not Be Empty" library="BuiltIn">
+<arg>${title}</arg>
+<doc>Verifies that the given item is not empty.</doc>
+<msg timestamp="20260221 20:48:45.633" level="INFO">Length is 6</msg>
+<status status="PASS" starttime="20260221 20:48:45.633" endtime="20260221 20:48:45.633"/>
+</kw>
+<status status="PASS" starttime="20260221 20:48:45.619" endtime="20260221 20:48:45.633"/>
+</kw>
+<kw name="Verify Home Page Loaded Successfully" library="keywords">
+<doc>Verify that the Home page of the MoRent application has loaded successfully by checking for key elements.</doc>
+<kw name="Wait For Page To Load Completely" library="keywords">
+<doc>Wait until the page has fully loaded by checking the document ready state.</doc>
+<kw name="Get Config Value" library="config.env_config.EnvConfig">
+<var>${timeout}</var>
+<arg>MEDIUM_TIMEOUT</arg>
+<doc>Get configuration value by key.</doc>
+<msg timestamp="20260221 20:48:45.633" level="INFO">${timeout} = 15</msg>
+<status status="PASS" starttime="20260221 20:48:45.633" endtime="20260221 20:48:45.634"/>
+</kw>
+<kw name="Get Config Value" library="config.env_config.EnvConfig">
+<var>${retry_count}</var>
+<arg>RETRY_COUNT</arg>
+<doc>Get configuration value by key.</doc>
+<msg timestamp="20260221 20:48:45.634" level="INFO">${retry_count} = 3x</msg>
+<status status="PASS" starttime="20260221 20:48:45.634" endtime="20260221 20:48:45.634"/>
+</kw>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<arg>${retry_count}</arg>
+<arg>${timeout}</arg>
+<arg>Page Should Be Ready</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<kw name="Page Should Be Ready" library="keywords">
+<doc>Verify that the page has fully loaded by checking the document ready state.</doc>
+<kw name="Execute Javascript" library="SeleniumLibrary">
+<var>${state}</var>
+<arg>return document.readyState</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<msg timestamp="20260221 20:48:45.635" level="INFO">Executing JavaScript:
+return document.readyState
+Without any arguments.</msg>
+<msg timestamp="20260221 20:48:45.638" level="INFO">${state} = interactive</msg>
+<status status="PASS" starttime="20260221 20:48:45.634" endtime="20260221 20:48:45.638"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>${state}</arg>
+<arg>complete</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<msg timestamp="20260221 20:48:45.639" level="FAIL">interactive != complete</msg>
+<status status="FAIL" starttime="20260221 20:48:45.638" endtime="20260221 20:48:45.639"/>
+</kw>
+<status status="FAIL" starttime="20260221 20:48:45.634" endtime="20260221 20:48:45.639"/>
+</kw>
+<kw name="Page Should Be Ready" library="keywords">
+<doc>Verify that the page has fully loaded by checking the document ready state.</doc>
+<kw name="Execute Javascript" library="SeleniumLibrary">
+<var>${state}</var>
+<arg>return document.readyState</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<msg timestamp="20260221 20:49:00.651" level="INFO">Executing JavaScript:
+return document.readyState
+Without any arguments.</msg>
+<msg timestamp="20260221 20:49:00.659" level="INFO">${state} = complete</msg>
+<status status="PASS" starttime="20260221 20:49:00.648" endtime="20260221 20:49:00.659"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>${state}</arg>
+<arg>complete</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20260221 20:49:00.660" endtime="20260221 20:49:00.660"/>
+</kw>
+<status status="PASS" starttime="20260221 20:49:00.643" endtime="20260221 20:49:00.660"/>
+</kw>
+<status status="PASS" starttime="20260221 20:48:45.634" endtime="20260221 20:49:00.660"/>
+</kw>
+<status status="PASS" starttime="20260221 20:48:45.633" endtime="20260221 20:49:00.660"/>
+</kw>
+<kw name="Get Config Value" library="config.env_config.EnvConfig">
+<var>${timeout}</var>
+<arg>LONG_TIMEOUT</arg>
+<doc>Get configuration value by key.</doc>
+<msg timestamp="20260221 20:49:00.661" level="INFO">${timeout} = 20</msg>
+<status status="PASS" starttime="20260221 20:49:00.660" endtime="20260221 20:49:00.661"/>
+</kw>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>${HOME_PAGE_LOGO}</arg>
+<arg>${timeout}</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" starttime="20260221 20:49:00.661" endtime="20260221 20:49:00.689"/>
+</kw>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>${HOME_PAGE_SEARCH_BAR}</arg>
+<arg>${timeout}</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" starttime="20260221 20:49:00.689" endtime="20260221 20:49:00.705"/>
+</kw>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>${HOME_SEARCH_BUTTON}</arg>
+<arg>${timeout}</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" starttime="20260221 20:49:00.705" endtime="20260221 20:49:00.720"/>
+</kw>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>${HOME_PAGE_MAIN_CONTAINER}</arg>
+<arg>${timeout}</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" starttime="20260221 20:49:00.721" endtime="20260221 20:49:00.735"/>
+</kw>
+<kw name="Replace String" library="String">
+<var>${screenshot_name}</var>
+<arg>${TEST NAME}</arg>
+<arg>${SPACE}</arg>
+<arg>_</arg>
+<doc>Replaces ``search_for`` in the given ``string`` with ``replace_with``.</doc>
+<msg timestamp="20260221 20:49:00.735" level="INFO">${screenshot_name} = SG-25_Verify_Rent_Now_Button_Navigation_from_Home_Page_Car_Card</msg>
+<status status="PASS" starttime="20260221 20:49:00.735" endtime="20260221 20:49:00.735"/>
+</kw>
+<kw name="Capture Page Screenshot" library="SeleniumLibrary">
+<arg>${screenshot_name}.png</arg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<msg timestamp="20260221 20:49:01.335" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="SG-25_Verify_Rent_Now_Button_Navigation_from_Home_Page_Car_Card.png"&gt;&lt;img src="SG-25_Verify_Rent_Now_Button_Navigation_from_Home_Page_Car_Card.png" width="800px"&gt;&lt;/a&gt;</msg>
+<status status="PASS" starttime="20260221 20:49:00.735" endtime="20260221 20:49:01.335"/>
+</kw>
+<status status="PASS" starttime="20260221 20:48:45.633" endtime="20260221 20:49:01.336"/>
+</kw>
+<kw name="Wait For Page To Load Completely" library="keywords">
+<doc>Wait until the page has fully loaded by checking the document ready state.</doc>
+<kw name="Get Config Value" library="config.env_config.EnvConfig">
+<var>${timeout}</var>
+<arg>MEDIUM_TIMEOUT</arg>
+<doc>Get configuration value by key.</doc>
+<msg timestamp="20260221 20:49:01.336" level="INFO">${timeout} = 15</msg>
+<status status="PASS" starttime="20260221 20:49:01.336" endtime="20260221 20:49:01.336"/>
+</kw>
+<kw name="Get Config Value" library="config.env_config.EnvConfig">
+<var>${retry_count}</var>
+<arg>RETRY_COUNT</arg>
+<doc>Get configuration value by key.</doc>
+<msg timestamp="20260221 20:49:01.336" level="INFO">${retry_count} = 3x</msg>
+<status status="PASS" starttime="20260221 20:49:01.336" endtime="20260221 20:49:01.336"/>
+</kw>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<arg>${retry_count}</arg>
+<arg>${timeout}</arg>
+<arg>Page Should Be Ready</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<kw name="Page Should Be Ready" library="keywords">
+<doc>Verify that the page has fully loaded by checking the document ready state.</doc>
+<kw name="Execute Javascript" library="SeleniumLibrary">
+<var>${state}</var>
+<arg>return document.readyState</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<msg timestamp="20260221 20:49:01.337" level="INFO">Executing JavaScript:
+return document.readyState
+Without any arguments.</msg>
+<msg timestamp="20260221 20:49:01.346" level="INFO">${state} = complete</msg>
+<status status="PASS" starttime="20260221 20:49:01.336" endtime="20260221 20:49:01.346"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>${state}</arg>
+<arg>complete</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20260221 20:49:01.346" endtime="20260221 20:49:01.346"/>
+</kw>
+<status status="PASS" starttime="20260221 20:49:01.336" endtime="20260221 20:49:01.346"/>
+</kw>
+<status status="PASS" starttime="20260221 20:49:01.336" endtime="20260221 20:49:01.346"/>
+</kw>
+<status status="PASS" starttime="20260221 20:49:01.336" endtime="20260221 20:49:01.346"/>
+</kw>
+<kw name="Locate Home Page Car Cards" library="keywords">
+<doc>Locates and verifies that car cards are displayed on the Home page</doc>
+<kw name="Get Config Value" library="config.env_config.EnvConfig">
+<var>${timeout}</var>
+<arg>LONG_TIMEOUT</arg>
+<doc>Get configuration value by key.</doc>
+<msg timestamp="20260221 20:49:01.346" level="INFO">${timeout} = 20</msg>
+<status status="PASS" starttime="20260221 20:49:01.346" endtime="20260221 20:49:01.346"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>3s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20260221 20:49:04.347" level="INFO">Slept 3 seconds</msg>
+<status status="PASS" starttime="20260221 20:49:01.346" endtime="20260221 20:49:04.348"/>
+</kw>
+<kw name="Execute Javascript" library="SeleniumLibrary">
+<arg>window.scrollTo(0, document.body.scrollHeight/2)</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<msg timestamp="20260221 20:49:04.351" level="INFO">Executing JavaScript:
+window.scrollTo(0, document.body.scrollHeight/2)
+Without any arguments.</msg>
+<status status="PASS" starttime="20260221 20:49:04.348" endtime="20260221 20:49:04.357"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20260221 20:49:06.359" level="INFO">Slept 2 seconds</msg>
+<status status="PASS" starttime="20260221 20:49:04.358" endtime="20260221 20:49:06.359"/>
+</kw>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${car_found}</var>
+<arg>Wait Until Element Is Visible</arg>
+<arg>${HOME_PAGE_CAR_CARD}</arg>
+<arg>timeout=10s</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>${HOME_PAGE_CAR_CARD}</arg>
+<arg>timeout=10s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" starttime="20260221 20:49:06.361" endtime="20260221 20:49:06.394"/>
+</kw>
+<msg timestamp="20260221 20:49:06.394" level="INFO">${car_found} = True</msg>
+<status status="PASS" starttime="20260221 20:49:06.360" endtime="20260221 20:49:06.394"/>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>${car_found} == ${False}</arg>
+<arg>Scroll To Find Car Cards</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20260221 20:49:06.394" endtime="20260221 20:49:06.395"/>
+</kw>
+<kw name="Get Element Count" library="SeleniumLibrary">
+<var>${car_count}</var>
+<arg>${HOME_PAGE_CAR_CARD}</arg>
+<doc>Returns the number of elements matching ``locator``.</doc>
+<msg timestamp="20260221 20:49:06.403" level="INFO">${car_count} = 24</msg>
+<status status="PASS" starttime="20260221 20:49:06.395" endtime="20260221 20:49:06.403"/>
+</kw>
+<kw name="Get Element Count" library="SeleniumLibrary">
+<var>${rent_now_count}</var>
+<arg>${HOME_PAGE_RENT_NOW_BUTTON}</arg>
+<doc>Returns the number of elements matching ``locator``.</doc>
+<msg timestamp="20260221 20:49:06.412" level="INFO">${rent_now_count} = 11</msg>
+<status status="PASS" starttime="20260221 20:49:06.403" endtime="20260221 20:49:06.412"/>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>${car_count} == 0 and ${rent_now_count} &gt; 0</arg>
+<arg>Log</arg>
+<arg>Car card container not found, but ${rent_now_count} Rent Now buttons detected - proceeding with test</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20260221 20:49:06.412" endtime="20260221 20:49:06.412"/>
+</kw>
+<kw name="Get Element Count" library="SeleniumLibrary">
+<var>${final_car_count}</var>
+<arg>${HOME_PAGE_CAR_CARD}</arg>
+<doc>Returns the number of elements matching ``locator``.</doc>
+<msg timestamp="20260221 20:49:06.421" level="INFO">${final_car_count} = 24</msg>
+<status status="PASS" starttime="20260221 20:49:06.413" endtime="20260221 20:49:06.421"/>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>${final_car_count} == 0</arg>
+<arg>Wait Until Element Is Visible</arg>
+<arg>${HOME_PAGE_RENT_NOW_BUTTON}</arg>
+<arg>timeout=${timeout}</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20260221 20:49:06.421" endtime="20260221 20:49:06.422"/>
+</kw>
+<kw name="Get Element Count" library="SeleniumLibrary">
+<var>${final_rent_now_count}</var>
+<arg>${HOME_PAGE_RENT_NOW_BUTTON}</arg>
+<doc>Returns the number of elements matching ``locator``.</doc>
+<msg timestamp="20260221 20:49:06.431" level="INFO">${final_rent_now_count} = 11</msg>
+<status status="PASS" starttime="20260221 20:49:06.422" endtime="20260221 20:49:06.431"/>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<arg>${final_car_count} &gt; 0 or ${final_rent_now_count} &gt; 0</arg>
+<arg>No car cards or Rent Now buttons found on Home page</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="PASS" starttime="20260221 20:49:06.431" endtime="20260221 20:49:06.431"/>
+</kw>
+<status status="PASS" starttime="20260221 20:49:01.346" endtime="20260221 20:49:06.431"/>
+</kw>
+<kw name="Click Rent Now Button On Car Card" library="keywords">
+<arg>0</arg>
+<doc>Clicks the Rent Now button on a car card from the Home page</doc>
+<kw name="Get Config Value" library="config.env_config.EnvConfig">
+<var>${timeout}</var>
+<arg>MEDIUM_TIMEOUT</arg>
+<doc>Get configuration value by key.</doc>
+<msg timestamp="20260221 20:49:06.432" level="INFO">${timeout} = 15</msg>
+<status status="PASS" starttime="20260221 20:49:06.432" endtime="20260221 20:49:06.432"/>
+</kw>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>${HOME_PAGE_RENT_NOW_BUTTON}</arg>
+<arg>timeout=${timeout}</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" starttime="20260221 20:49:06.432" endtime="20260221 20:49:06.443"/>
+</kw>
+<kw name="Get WebElements" library="SeleniumLibrary">
+<var>${rent_now_buttons}</var>
+<arg>${HOME_PAGE_RENT_NOW_BUTTON}</arg>
+<doc>Returns a list of WebElement objects matching the ``locator``.</doc>
+<msg timestamp="20260221 20:49:06.449" level="INFO">${rent_now_buttons} = [&lt;selenium.webdriver.remote.webelement.WebElement (session="fac228bc54861a8e9645dc9b62b61968", element="f.112BC4FCAB81217321DE5B45D61604A1.d.C5020053630F2515F08A01C5FB979CD6.e.51")&gt;, &lt;selenium.webdriv...</msg>
+<status status="PASS" starttime="20260221 20:49:06.443" endtime="20260221 20:49:06.449"/>
+</kw>
+<kw name="Get Length" library="BuiltIn">
+<var>${button_count}</var>
+<arg>${rent_now_buttons}</arg>
+<doc>Returns and logs the length of the given item as an integer.</doc>
+<msg timestamp="20260221 20:49:06.449" level="INFO">Length is 11</msg>
+<msg timestamp="20260221 20:49:06.449" level="INFO">${button_count} = 11</msg>
+<status status="PASS" starttime="20260221 20:49:06.449" endtime="20260221 20:49:06.449"/>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<arg>${button_count} &gt; ${card_index}</arg>
+<arg>Rent Now button at index ${card_index} not found. Found ${button_count} buttons.</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="PASS" starttime="20260221 20:49:06.449" endtime="20260221 20:49:06.449"/>
+</kw>
+<kw name="Click Element" library="SeleniumLibrary">
+<arg>${rent_now_buttons}[${card_index}]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<msg timestamp="20260221 20:49:06.449" level="INFO">Clicking element '&lt;selenium.webdriver.remote.webelement.WebElement (session="fac228bc54861a8e9645dc9b62b61968", element="f.112BC4FCAB81217321DE5B45D61604A1.d.C5020053630F2515F08A01C5FB979CD6.e.51")&gt;'.</msg>
+<status status="PASS" starttime="20260221 20:49:06.449" endtime="20260221 20:49:06.496"/>
+</kw>
+<status status="PASS" starttime="20260221 20:49:06.431" endtime="20260221 20:49:06.496"/>
+</kw>
+<kw name="Verify Navigation After Rent Now Click" library="keywords">
+<doc>Verifies that the page has navigated after clicking the Rent Now button</doc>
+<kw name="Get Config Value" library="config.env_config.EnvConfig">
+<var>${timeout}</var>
+<arg>LONG_TIMEOUT</arg>
+<doc>Get configuration value by key.</doc>
+<msg timestamp="20260221 20:49:06.496" level="INFO">${timeout} = 20</msg>
+<status status="PASS" starttime="20260221 20:49:06.496" endtime="20260221 20:49:06.496"/>
+</kw>
+<kw name="Wait For Page To Load Completely" library="keywords">
+<doc>Wait until the page has fully loaded by checking the document ready state.</doc>
+<kw name="Get Config Value" library="config.env_config.EnvConfig">
+<var>${timeout}</var>
+<arg>MEDIUM_TIMEOUT</arg>
+<doc>Get configuration value by key.</doc>
+<msg timestamp="20260221 20:49:06.496" level="INFO">${timeout} = 15</msg>
+<status status="PASS" starttime="20260221 20:49:06.496" endtime="20260221 20:49:06.496"/>
+</kw>
+<kw name="Get Config Value" library="config.env_config.EnvConfig">
+<var>${retry_count}</var>
+<arg>RETRY_COUNT</arg>
+<doc>Get configuration value by key.</doc>
+<msg timestamp="20260221 20:49:06.497" level="INFO">${retry_count} = 3x</msg>
+<status status="PASS" starttime="20260221 20:49:06.496" endtime="20260221 20:49:06.497"/>
+</kw>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<arg>${retry_count}</arg>
+<arg>${timeout}</arg>
+<arg>Page Should Be Ready</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<kw name="Page Should Be Ready" library="keywords">
+<doc>Verify that the page has fully loaded by checking the document ready state.</doc>
+<kw name="Execute Javascript" library="SeleniumLibrary">
+<var>${state}</var>
+<arg>return document.readyState</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<msg timestamp="20260221 20:49:06.498" level="INFO">Executing JavaScript:
+return document.readyState
+Without any arguments.</msg>
+<msg timestamp="20260221 20:49:06.512" level="INFO">${state} = complete</msg>
+<status status="PASS" starttime="20260221 20:49:06.498" endtime="20260221 20:49:06.512"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>${state}</arg>
+<arg>complete</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20260221 20:49:06.512" endtime="20260221 20:49:06.512"/>
+</kw>
+<status status="PASS" starttime="20260221 20:49:06.497" endtime="20260221 20:49:06.512"/>
+</kw>
+<status status="PASS" starttime="20260221 20:49:06.497" endtime="20260221 20:49:06.512"/>
+</kw>
+<status status="PASS" starttime="20260221 20:49:06.496" endtime="20260221 20:49:06.512"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20260221 20:49:08.514" level="INFO">Slept 2 seconds</msg>
+<status status="PASS" starttime="20260221 20:49:06.512" endtime="20260221 20:49:08.514"/>
+</kw>
+<kw name="Get Location" library="SeleniumLibrary">
+<var>${current_url}</var>
+<doc>Returns the current browser window URL.</doc>
+<msg timestamp="20260221 20:49:08.518" level="INFO">${current_url} = https://morent-car.archisacademy.com/rental-cars/2</msg>
+<status status="PASS" starttime="20260221 20:49:08.514" endtime="20260221 20:49:08.518"/>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<var>${is_home_page}</var>
+<arg>"${current_url}" == "https://morent-car.archisacademy.com/" or "${current_url}" == "https://morent-car.archisacademy.com/#" or "${current_url}" == "https://morent-car.archisacademy.com"</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<msg timestamp="20260221 20:49:08.518" level="INFO">${is_home_page} = False</msg>
+<status status="PASS" starttime="20260221 20:49:08.518" endtime="20260221 20:49:08.518"/>
+</kw>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${details_present}</var>
+<arg>Wait Until Element Is Visible</arg>
+<arg>${CAR_DETAILS_PAGE}</arg>
+<arg>timeout=${timeout}</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>${CAR_DETAILS_PAGE}</arg>
+<arg>timeout=${timeout}</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" starttime="20260221 20:49:08.518" endtime="20260221 20:49:08.533"/>
+</kw>
+<msg timestamp="20260221 20:49:08.533" level="INFO">${details_present} = True</msg>
+<status status="PASS" starttime="20260221 20:49:08.518" endtime="20260221 20:49:08.533"/>
+</kw>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${title_present}</var>
+<arg>Wait Until Element Is Visible</arg>
+<arg>${CAR_DETAILS_TITLE}</arg>
+<arg>timeout=${timeout}</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>${CAR_DETAILS_TITLE}</arg>
+<arg>timeout=${timeout}</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" starttime="20260221 20:49:08.533" endtime="20260221 20:49:08.547"/>
+</kw>
+<msg timestamp="20260221 20:49:08.547" level="INFO">${title_present} = True</msg>
+<status status="PASS" starttime="20260221 20:49:08.533" endtime="20260221 20:49:08.547"/>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<var>${url_changed}</var>
+<arg>not ${is_home_page}</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<msg timestamp="20260221 20:49:08.547" level="INFO">${url_changed} = True</msg>
+<status status="PASS" starttime="20260221 20:49:08.547" endtime="20260221 20:49:08.547"/>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<var>${url_has_car_keywords}</var>
+<arg>"car" in "${current_url}".lower() or "detail" in "${current_url}".lower() or "booking" in "${current_url}".lower() or "/cars/" in "${current_url}".lower()</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<msg timestamp="20260221 20:49:08.547" level="INFO">${url_has_car_keywords} = True</msg>
+<status status="PASS" starttime="20260221 20:49:08.547" endtime="20260221 20:49:08.547"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>Current URL: ${current_url}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260221 20:49:08.548" level="INFO">Current URL: https://morent-car.archisacademy.com/rental-cars/2</msg>
+<status status="PASS" starttime="20260221 20:49:08.548" endtime="20260221 20:49:08.548"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>Details present: ${details_present}, Title present: ${title_present}, URL changed: ${url_changed}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260221 20:49:08.548" level="INFO">Details present: True, Title present: True, URL changed: True</msg>
+<status status="PASS" starttime="20260221 20:49:08.548" endtime="20260221 20:49:08.548"/>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<arg>${url_changed} or ${details_present} or ${title_present} or ${url_has_car_keywords}</arg>
+<arg>Navigation verification failed. URL: ${current_url}, Details: ${details_present}, Title: ${title_present}</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="PASS" starttime="20260221 20:49:08.548" endtime="20260221 20:49:08.548"/>
+</kw>
+<kw name="Replace String" library="String">
+<var>${screenshot_name}</var>
+<arg>${TEST NAME}</arg>
+<arg>${SPACE}</arg>
+<arg>_</arg>
+<doc>Replaces ``search_for`` in the given ``string`` with ``replace_with``.</doc>
+<msg timestamp="20260221 20:49:08.548" level="INFO">${screenshot_name} = SG-25_Verify_Rent_Now_Button_Navigation_from_Home_Page_Car_Card</msg>
+<status status="PASS" starttime="20260221 20:49:08.548" endtime="20260221 20:49:08.548"/>
+</kw>
+<kw name="Capture Page Screenshot" library="SeleniumLibrary">
+<arg>${screenshot_name}.png</arg>
+<doc>Takes a screenshot of the current page and embeds it into a log file.</doc>
+<msg timestamp="20260221 20:49:09.074" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="SG-25_Verify_Rent_Now_Button_Navigation_from_Home_Page_Car_Card.png"&gt;&lt;img src="SG-25_Verify_Rent_Now_Button_Navigation_from_Home_Page_Car_Card.png" width="800px"&gt;&lt;/a&gt;</msg>
+<status status="PASS" starttime="20260221 20:49:08.548" endtime="20260221 20:49:09.075"/>
+</kw>
+<status status="PASS" starttime="20260221 20:49:06.496" endtime="20260221 20:49:09.075"/>
+</kw>
+<kw name="Close All Browsers" library="SeleniumLibrary" type="TEARDOWN">
+<doc>Closes all open browsers and resets the browser cache.</doc>
+<status status="PASS" starttime="20260221 20:49:09.075" endtime="20260221 20:49:09.175"/>
+</kw>
+<doc>Verify that clicking the Rent Now button on a car card from the Home page correctly navigates to the car details or booking flow.
+
+Steps:
+1. Launch the MoRent website (https://morent-car.archisacademy.com/)
+2. Wait for the Home page to load completely.
+3. Locate the car cards displayed on the Home page.
+4. Select a Car Card: Click on the Rent Now button of any visible car card.
+5. Verify Navigation: Observe the page navigation after clicking the button.
+
+Expected Results:
+- The MoRent website opens successfully.
+- The Home page loads completely and displays car cards.
+- Car cards are visible on the Home page.
+- Clicking the Rent Now button on a car card successfully navigates to the selected car's details page or booking flow.
+- The navigation is successful and the new page loads correctly.</doc>
+<tag>home</tag>
+<tag>navigation</tag>
+<tag>rent_now</tag>
+<status status="PASS" starttime="20260221 20:48:42.589" endtime="20260221 20:49:09.175"/>
+</test>
+<doc>Automate the verification of Rent Now button functionality on car cards displayed on the Home page. This test ensures that clicking the Rent Now button from a Home page car card correctly navigates the user to the selected car's details or booking flow.</doc>
+<status status="PASS" starttime="20260221 20:48:42.586" endtime="20260221 20:49:09.176"/>
+</suite>
+<status status="PASS" starttime="20260221 20:48:42.585" endtime="20260221 20:49:09.177"/>
+</suite>
+<suite id="s1-s4" name="Search" source="/Users/vishnumk/Desktop/sgbi-inc-test-engineer-automation-ai-systems-team-2/tests/search">
+<suite id="s1-s4-s1" name="Search Tests" source="/Users/vishnumk/Desktop/sgbi-inc-test-engineer-automation-ai-systems-team-2/tests/search/search_tests.robot">
+<test id="s1-s4-s1-t1" name="Search Test Template" line="7">
+<kw name="Log" library="BuiltIn">
+<arg>Implement search test here</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260221 20:49:09.186" level="INFO">Implement search test here</msg>
+<status status="PASS" starttime="20260221 20:49:09.186" endtime="20260221 20:49:09.186"/>
+</kw>
+<doc>Placeholder for search test</doc>
+<tag>search</tag>
+<status status="PASS" starttime="20260221 20:49:09.185" endtime="20260221 20:49:09.186"/>
+</test>
+<doc>Template for Search tests</doc>
+<status status="PASS" starttime="20260221 20:49:09.182" endtime="20260221 20:49:09.186"/>
+</suite>
+<status status="PASS" starttime="20260221 20:49:09.178" endtime="20260221 20:49:09.187"/>
+</suite>
+<status status="PASS" starttime="20260221 20:48:42.446" endtime="20260221 20:49:09.188"/>
+</suite>
+<statistics>
+<total>
+<stat pass="4" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="1" fail="0" skip="0">auth</stat>
+<stat pass="1" fail="0" skip="0">booking</stat>
+<stat pass="1" fail="0" skip="0">home</stat>
+<stat pass="1" fail="0" skip="0">navigation</stat>
+<stat pass="1" fail="0" skip="0">rent_now</stat>
+<stat pass="1" fail="0" skip="0">search</stat>
+</tag>
+<suite>
+<stat pass="4" fail="0" skip="0" id="s1" name="Tests">Tests</stat>
+<stat pass="1" fail="0" skip="0" id="s1-s1" name="Auth">Tests.Auth</stat>
+<stat pass="1" fail="0" skip="0" id="s1-s1-s1" name="Login Tests">Tests.Auth.Login Tests</stat>
+<stat pass="1" fail="0" skip="0" id="s1-s2" name="Booking">Tests.Booking</stat>
+<stat pass="1" fail="0" skip="0" id="s1-s2-s1" name="Booking Tests">Tests.Booking.Booking Tests</stat>
+<stat pass="1" fail="0" skip="0" id="s1-s3" name="Home">Tests.Home</stat>
+<stat pass="1" fail="0" skip="0" id="s1-s3-s1" name="Rent Now Navigation Tests">Tests.Home.Rent Now Navigation Tests</stat>
+<stat pass="1" fail="0" skip="0" id="s1-s4" name="Search">Tests.Search</stat>
+<stat pass="1" fail="0" skip="0" id="s1-s4-s1" name="Search Tests">Tests.Search.Search Tests</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
