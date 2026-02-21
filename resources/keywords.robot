@@ -67,93 +67,45 @@ Verify Home Page Search Bar Is Visible
     [Documentation]    Verify that the search bar is visible on the Home page.
     Element Should Be Visible    ${HOME_PAGE_SEARCH_BAR}
 
-Verify Favorite Icon Is Visible
-    [Documentation]    Verify that the Favorite icon is visible in the Header section.
-    Element Should Be Visible    ${FAVORITE_LINK}
-
-Verify Orders Icon Is Visible
-    [Documentation]    Verify that the Orders icon is visible in the Header section.
-    Element Should Be Visible    ${ORDERS_LINK}
-
-Verify Settings Button Is Visible
-    [Documentation]    Verify that the User Settings button is visible in the Header section.
-    Element Should Be Visible    ${USER_SETTINGS_BUTTON}
-
-Verify Sign In Button Is Visible
-    [Documentation]    Verify that the Sign In button is visible in the Header section.
-    Element Should Be Visible    ${SIGN_IN_BUTTON}
-
-Verify Navigation Clickability
-    [Documentation]    Click each navigation item and verify URL redirection
-    
-    # Sign In
-    Verify SignIn Navigation
-    Go Back
-    Wait For Page To Load Completely
-
-    # Favorites
-    Verify Favorites Navigation
-    Go Back
-    Wait For Page To Load Completely
-
-    # Orders
-    Verify Orders Navigation 
-    Go Back
-    Wait For Page To Load Completely
-
-    # Settings
-    Verify Settings Clickability
-    Go Back
-    Wait For Page To Load Completely
-
-Verify Favorites Navigation
-    [Documentation]    Click the Favorite icon and verify that it navigates to the Favorites page.
-    ${timeout}=    Get Config Value    LONG_TIMEOUT
+Verify Navigation Clickability Of Header Elements
+    [Documentation]    Click each navigation item and verify redirection
     ${screenshot_name}=    Replace String    ${TEST NAME}    ${SPACE}    _
-    Wait Until Element Is Visible    ${FAVORITE_LINK}    ${timeout}
-    Wait Until Element Is Enabled    ${FAVORITE_LINK}    ${timeout}
-    Click Element    ${FAVORITE_LINK}
-    ${base_url}=    Get Config Value    BASE_URL
-    ${fav_path}=    Get Config Value    FAVORITES_PATH
-    ${fav_url}=    Set Variable    ${base_url}${fav_path}
-    Wait Until Location Contains    ${fav_url}    ${timeout}
     ${fav_screenshot}=    Get Config Value    FAVOURITE_NAVIGATION_SCREENSHOT
-    Capture Page Screenshot    ${screenshot_name}_${fav_screenshot}
-
-Verify Orders Navigation
-    [Documentation]    Click the Orders icon and verify that it navigates to the Orders page.
-    ${timeout}=    Get Config Value    LONG_TIMEOUT
-    ${screenshot_name}=    Replace String    ${TEST NAME}    ${SPACE}    _
-    Wait Until Element Is Visible    ${ORDERS_LINK}    ${timeout}
-    Wait Until Element Is Enabled    ${ORDERS_LINK}    ${timeout}
-    Click Element    ${ORDERS_LINK}
-    ${base_url}=    Get Config Value    BASE_URL
-    ${orders_path}=    Get Config Value    ORDERS_PATH
-    ${orders_url}=    Set Variable    ${base_url}${orders_path}
-    Wait Until Location Contains    ${orders_url}    ${timeout}
     ${orders_screenshot}=    Get Config Value    ORDERS_NAVIGATION_SCREENSHOT
-    Capture Page Screenshot    ${screenshot_name}_${orders_screenshot}
-
-Verify SignIn Navigation
-    [Documentation]    Click the Sign In button and verify that it navigates to the Sign In page.
-    ${timeout}=    Get Config Value    LONG_TIMEOUT
-    ${screenshot_name}=    Replace String    ${TEST NAME}    ${SPACE}    _
-    Wait Until Element Is Visible    ${SIGN_IN_BUTTON}    ${timeout}
-    Wait Until Element Is Enabled    ${SIGN_IN_BUTTON}    ${timeout}
-    Click Element    ${SIGN_IN_BUTTON}
-    ${sign_in_text}=    Get Config Value    SIGN_IN_PAGE_TEXT
-    Wait Until Page Contains    ${sign_in_text}    ${timeout}
-    ${sign_in_page_title}=    Get Config Value    SIGN_IN_PAGE_TITLE
-    Title Should Be    ${sign_in_page_title}
-    ${sign_in_screenshot}=    Get Config Value    SIGN_IN_NAVIGATION_SCREENSHOT
-    Capture Page Screenshot    ${screenshot_name}_${sign_in_screenshot}
-
-Verify Settings Clickability
-    [Documentation]    Click the User Settings button and verify that it navigates to the Settings page.
-    ${timeout}=    Get Config Value    LONG_TIMEOUT
-    ${screenshot_name}=    Replace String    ${TEST NAME}    ${SPACE}    _
-    Wait Until Element Is Visible    ${USER_SETTINGS_BUTTON}    ${timeout}
-    Wait Until Element Is Enabled    ${USER_SETTINGS_BUTTON}    ${timeout}
-    Click Element    ${USER_SETTINGS_BUTTON}
     ${settings_screenshot}=    Get Config Value    SETTINGS_NAVIGATION_SCREENSHOT
-    Capture Page Screenshot    ${screenshot_name}_${settings_screenshot}
+    ${sign_in_screenshot}=    Get Config Value    SIGN_IN_NAVIGATION_SCREENSHOT
+    ${fav_path}=    Get Config Value    FAVORITES_PATH
+    ${orders_path}=    Get Config Value    ORDERS_PATH
+    ${sign_text}=    Get Config Value    SIGN_IN_PAGE_TEXT
+    ${sign_title}=    Get Config Value    SIGN_IN_PAGE_TITLE
+
+    Verify Navigation Redirection    ${FAVORITE_LINK}    ${EMPTY}    ${fav_path}    ${EMPTY}    ${screenshot_name}_${fav_screenshot}
+    Verify Navigation Redirection    ${ORDERS_LINK}      ${EMPTY}    ${orders_path}    ${EMPTY}    ${screenshot_name}_${orders_screenshot}
+    Verify Navigation Redirection    ${SIGN_IN_BUTTON}   ${sign_text}    ${EMPTY}    ${sign_title}    ${screenshot_name}_${sign_in_screenshot}
+    Verify Navigation Redirection    ${USER_SETTINGS_BUTTON}    ${EMPTY}    ${EMPTY}    ${EMPTY}    ${screenshot_name}_${settings_screenshot}
+
+Verify Navigation Redirection
+    [Arguments]    ${locator}    ${expected_text}=${EMPTY}    ${expected_url}=${EMPTY}    ${expected_title}=${EMPTY}    ${screenshot_name}=nav.png
+
+    ${timeout}=    Get Config Value    LONG_TIMEOUT
+    Wait Until Element Is Visible    ${locator}    ${timeout}
+    Wait Until Element Is Enabled    ${locator}    ${timeout}
+    Click Element    ${locator}
+
+    # Optional URL validation
+    IF    '${expected_url}' != ''
+        Wait Until Location Contains    ${expected_url}    ${timeout}
+    END
+
+    # Optional Page Text validation
+    IF    '${expected_text}' != ''
+        Wait Until Page Contains    ${expected_text}    ${timeout}
+    END
+
+    # Optional Page Title validation
+    IF    '${expected_title}' != ''
+        Title Should Be    ${expected_title}
+    END
+    Capture Page Screenshot    ${screenshot_name}
+    Go Back
+    Wait For Page To Load Completely
