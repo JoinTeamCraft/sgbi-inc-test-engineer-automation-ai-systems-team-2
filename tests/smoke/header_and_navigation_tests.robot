@@ -34,8 +34,4 @@ SG-2 Verify Header and Navigation Elements
     Verify Header Section Is Visible
     Verify Application Logo Is Visible
     Verify Home Page Search Bar Is Visible
-    Verify Favorite Icon Is Visible
-    Verify Orders Icon Is Visible
-    Verify Settings Button Is Visible
-    Verify Sign In Button Is Visible            
-    Verify Navigation Clickability
+    Verify Navigation Clickability Of Header Elements
