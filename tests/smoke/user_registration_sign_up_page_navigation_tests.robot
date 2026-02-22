@@ -19,17 +19,17 @@ SG-3 Verify User Registration (Sign Up) Page Navigation
     ...    Verify that the Registration form is displayed.
     ...    Verify Registration Form Fields Presence:
     ...    Check that the following input fields are present and visible:
-    ...    Full Name
-    ...    Email Address
+    ...    First name
+    ...    Last name
+    ...    Email address
     ...    Password
-    ...    Confirm Password
-    ...    Verify that the Register / Sign Up submit button is visible.
+    ...    Verify that the Register / Sign Up Continue button is visible.
     ...    Expected Results
     ...    Clicking the Register / Sign Up button navigates to the Registration page.
     ...    The Registration page loads successfully.
     ...    The Registration form is displayed.
     ...    All required input fields are present and visible.
-    ...    The Register / Sign Up submit button is visible.
+    ...    The Register / Sign Up Continue button is visible.
 
     [Tags]    smoke    user_registration_sign_up_navigation
     Wait For Page To Load Completely
