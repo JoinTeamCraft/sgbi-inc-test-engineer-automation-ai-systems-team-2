@@ -24,6 +24,8 @@ class EnvConfig:
     ORDERS_NAVIGATION_SCREENSHOT = "Orders_Navigation.png"
     SETTINGS_NAVIGATION_SCREENSHOT = "Settings_Navigation.png"
     SIGN_IN_NAVIGATION_SCREENSHOT = "Sign_In_Navigation.png"
+    SIGN_UP_PAGE_TEXT = "Create your account"
+    SIGN_UP_PAGE_SCREENSHOT = "Sign_Up_Page.png"
 
     # Navigation Config
     FAVORITES_PATH = "favourites"
