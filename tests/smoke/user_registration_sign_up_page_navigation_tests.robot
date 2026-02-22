@@ -11,9 +11,8 @@ SG-3 Verify User Registration (Sign Up) Page Navigation
     [Documentation]    Verify that a user can navigate from the Home page to the User Registration (Sign Up) page on the MoRent website, and that the Registration page loads successfully.
     ...    Launch the MoRent website
     ...    Wait for the Home page to load completely.
-    ...    Navigate to Registration Page:
-    ...    Locate the Register / Sign Up button in the Header section.
-    ...    Click on the Register / Sign Up button.
+    ...    Click the Sign In link from the Home page.
+    ...    Click the Sign Up link from the Sign In page.
     ...    Verify Registration Page Load:
     ...    Wait for the Registration page to load.
     ...    Verify that the Registration form is displayed.
