@@ -36,4 +36,3 @@ SG-3 Verify User Registration (Sign Up) Page Navigation
     Navigate To Registration Page
     Verify Registration Page Loaded
     Verify Registration Form Fields Presence
-    
