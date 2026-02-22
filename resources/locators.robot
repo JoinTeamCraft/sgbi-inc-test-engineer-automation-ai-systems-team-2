@@ -23,9 +23,9 @@ ${SIGN_IN_BUTTON}    xpath=//div[contains(@class,'user-sign')]
 ${SIGN_UP_LINK}    xpath=//a[contains(@href,'sign-up') and text()='Sign up']
 
 # Registration Page Locators
-${REGISTRATION_FORM}    xpath=//div[contains(@class,'componentContainer') ]/div[contains(@data-clerk-component,'SignUp')]
+${REGISTRATION_FORM}    xpath=//div[contains(@class,'componentContainer')]/div[contains(@data-clerk-component,'SignUp')]
 ${REGISTRATION_FIRST_NAME_FIELD}    xpath=//input[@name='firstName']
 ${REGISTRATION_LAST_NAME_FIELD}    xpath=//input[@name='lastName']
 ${REGISTRATION_EMAIL_FIELD}    xpath=//input[@name='emailAddress']
 ${REGISTRATION_PASSWORD_FIELD}    xpath=//input[@name='password']
-${REGISTRATION_CONTINUE_BUTTON}    xpath=//button[contains(@class,'formButton') ]/span[text()='Continue']
+${REGISTRATION_CONTINUE_BUTTON}    xpath=//button[contains(@class,'formButton')]/span[text()='Continue']
