@@ -137,4 +137,3 @@ Verify Registration Form Fields Presence
     Element Should Be Visible    ${REGISTRATION_EMAIL_FIELD}
     Element Should Be Visible    ${REGISTRATION_PASSWORD_FIELD}
     Element Should Be Visible    ${REGISTRATION_CONTINUE_BUTTON}
- 
