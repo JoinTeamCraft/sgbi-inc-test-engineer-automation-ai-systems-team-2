@@ -1,0 +1,5 @@
+# Robot Framework output
+results/*.html
+results/*.xml
+results/*.png
+!results/.gitkeep
