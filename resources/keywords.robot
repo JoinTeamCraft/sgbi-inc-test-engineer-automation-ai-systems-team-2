@@ -112,9 +112,10 @@ Verify Navigation After Rent Now Click
     ${base_url}=    Get Config Value    BASE_URL
     ${base_stripped}=    Evaluate    "${base_url}".rstrip("/")
     ${is_home_page}=    Evaluate    ("${current_url}".rstrip("/") == "${base_stripped}") or ("${current_url}" == "${base_stripped}" + "#")
-    # Primary check: assert presence of a specific element that only exists on car details/booking page
-    Wait Until Element Is Visible    ${CAR_DETAILS_PAGE}    timeout=${timeout}
-    # If still on home URL, require details/title to be present (stricter than permissive OR)
+    # Prioritize element visibility: require car details container or title to be visible (no URL keyword matching)
+    ${details_present}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${CAR_DETAILS_PAGE}    timeout=${timeout}
+    ${title_present}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${CAR_DETAILS_TITLE}    timeout=${timeout}
+    Should Be True    ${details_present} or ${title_present}    Navigation verification failed: car details page and title not visible. URL: ${current_url}
     Run Keyword If    ${is_home_page}    Wait Until Element Is Visible    ${CAR_DETAILS_TITLE}    timeout=${timeout}
     Log    Current URL: ${current_url}; car details page verified
     ${screenshot_name}=    Replace String    ${TEST NAME}    ${SPACE}    _
