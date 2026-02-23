@@ -19,10 +19,10 @@ class EnvConfig:
     PAGE_NOT_FOUND_CODE = "404"
     SERVER_ERROR_CODE = "500"
     
-    # Test Account Credentials
-    TEST_EMAIL = "doe+clerk_test@example.com"
-    TEST_PASSWORD = "morenttest@12345"
-    TEST_OTP = "424242"
+    # Test Account Credentials (use env vars in CI; never commit real secrets)
+    TEST_EMAIL = os.environ.get("MORENT_TEST_EMAIL", "doe+clerk_test@example.com")
+    TEST_PASSWORD = os.environ.get("MORENT_TEST_PASSWORD", "morenttest@12345")
+    TEST_OTP = os.environ.get("MORENT_TEST_OTP", "424242")
     
     # Screenshot Configuration
     SCREENSHOT_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "results", "screenshots")

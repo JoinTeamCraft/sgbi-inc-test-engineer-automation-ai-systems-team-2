@@ -59,11 +59,9 @@ Take Screenshot On Failure
 Locate Home Page Car Cards
     [Documentation]    Locates and verifies that car cards are displayed on the Home page
     ${timeout}=    Get Config Value    LONG_TIMEOUT
-    # Wait for any dynamic content to load
-    Sleep    3s
-    # Scroll down to ensure car cards are in view
+    Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
     Execute Javascript    window.scrollTo(0, document.body.scrollHeight/2)
-    Sleep    2s
+    Wait Until Keyword Succeeds    5s    1s    Element Should Be Visible    ${HOME_PAGE_MAIN_CONTAINER}
     # Try multiple locator strategies with retries
     ${car_found}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${HOME_PAGE_CAR_CARD}    timeout=10s
     # If not found, try scrolling and alternative approaches
@@ -84,14 +82,13 @@ Scroll To Find Car Cards
     [Documentation]    Scrolls the page to find car cards if they're not immediately visible
     FOR    ${i}    IN RANGE    5
         Execute Javascript    window.scrollBy(0, 400)
-        Sleep    1.5s
+        Wait Until Keyword Succeeds    2s    0.5s    Page Should Be Ready
         ${car_count}=    Get Element Count    ${HOME_PAGE_CAR_CARD}
         ${rent_now_count}=    Get Element Count    ${HOME_PAGE_RENT_NOW_BUTTON}
         Exit For Loop If    ${car_count} > 0 or ${rent_now_count} > 0
     END
-    # Scroll back to top if needed
     Execute Javascript    window.scrollTo(0, 0)
-    Sleep    1s
+    Wait Until Keyword Succeeds    2s    0.5s    Page Should Be Ready
 
 Click Rent Now Button On Car Card
     [Documentation]    Clicks the Rent Now button on a car card from the Home page
@@ -105,24 +102,17 @@ Click Rent Now Button On Car Card
     Click Element    ${rent_now_buttons}[${card_index}]
 
 Verify Navigation After Rent Now Click
-    [Documentation]    Verifies that the page has navigated after clicking the Rent Now button
+    [Documentation]    Verifies navigation to car details/booking by asserting a specific element unique to that page.
     ${timeout}=    Get Config Value    LONG_TIMEOUT
     Wait For Page To Load Completely
-    Sleep    2s
-    # Verify that we've navigated away from the home page by checking URL
+    Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
     ${current_url}=    Get Location
-    ${is_home_page}=    Evaluate    "${current_url}" == "https://morent-car.archisacademy.com/" or "${current_url}" == "https://morent-car.archisacademy.com/#" or "${current_url}" == "https://morent-car.archisacademy.com"
-    # Check for car details or booking page elements with multiple strategies
-    ${details_present}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${CAR_DETAILS_PAGE}    timeout=${timeout}
-    ${title_present}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${CAR_DETAILS_TITLE}    timeout=${timeout}
-    # Alternative: check if URL changed or contains car/detail/booking keywords
-    ${url_changed}=    Evaluate    not ${is_home_page}
-    ${url_has_car_keywords}=    Evaluate    "car" in "${current_url}".lower() or "detail" in "${current_url}".lower() or "booking" in "${current_url}".lower() or "/cars/" in "${current_url}".lower()
-    # Log for debugging
-    Log    Current URL: ${current_url}
-    Log    Details present: ${details_present}, Title present: ${title_present}, URL changed: ${url_changed}
-    # Accept if URL changed OR if details/title elements are present
-    Should Be True    ${url_changed} or ${details_present} or ${title_present} or ${url_has_car_keywords}    Navigation verification failed. URL: ${current_url}, Details: ${details_present}, Title: ${title_present}
+    ${base_url}=    Get Config Value    BASE_URL
+    ${base_stripped}=    Evaluate    "${base_url}".rstrip("/")
+    ${is_home_page}=    Evaluate    ("${current_url}".rstrip("/") == "${base_stripped}") or ("${current_url}" == "${base_stripped}" + "#")
+    Wait Until Element Is Visible    ${CAR_DETAILS_PAGE}    timeout=${timeout}
+    Run Keyword If    ${is_home_page}    Wait Until Element Is Visible    ${CAR_DETAILS_TITLE}    timeout=${timeout}
+    Log    Current URL: ${current_url}; car details page verified
     ${screenshot_name}=    Replace String    ${TEST NAME}    ${SPACE}    _
     Capture Page Screenshot    ${screenshot_name}.png
 
@@ -130,13 +120,12 @@ Verify Navigation After Rent Now Click
 Scroll To Car Listing Section
     [Documentation]    Scroll down to the car listing section on the Home page
     Execute Javascript    window.scrollTo(0, document.body.scrollHeight / 2)
-    Sleep    2s
-    # Scroll until Show More Cars or car cards are in view
+    Wait Until Keyword Succeeds    5s    1s    Page Should Be Ready
     FOR    ${i}    IN RANGE    4
         ${show_more_visible}=    Run Keyword And Return Status    Element Should Be Visible    ${HOME_PAGE_SHOW_MORE_CARS_BUTTON}
         Exit For Loop If    ${show_more_visible}
         Execute Javascript    window.scrollBy(0, 350)
-        Sleep    1s
+        Wait Until Keyword Succeeds    2s    0.5s    Page Should Be Ready
     END
 
 Verify Show More Cars Button Visible And Clickable
@@ -167,7 +156,7 @@ Wait For Car Count To Increase
     [Arguments]    ${initial_count}
     ${timeout}=    Get Config Value    LONG_TIMEOUT
     FOR    ${i}    IN RANGE    0    ${timeout}    2
-        Sleep    2s
+        Wait Until Keyword Succeeds    2s    0.5s    Page Should Be Ready
         ${current}=    Get Element Count    ${HOME_PAGE_CAR_CARD}
         ${current}=    Run Keyword If    ${current} == 0    Get Element Count    ${HOME_PAGE_RENT_NOW_BUTTON}    ELSE    Set Variable    ${current}
         Return From Keyword If    ${current} > ${initial_count}    ${current}
@@ -179,15 +168,11 @@ Wait For Car Count To Increase
 Wait For New Car Cards To Load
     [Documentation]    Wait for new car cards to load after clicking Show More Cars
     ${timeout}=    Get Config Value    LONG_TIMEOUT
-    Sleep    2s
     Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
-    Sleep    3s
-    # Wait for loading indicator to disappear if present
     ${loading_gone}=    Run Keyword And Return Status    Wait Until Element Is Not Visible    ${LOADING_SPINNER}    timeout=5s
-    Run Keyword If    not ${loading_gone}    Sleep    3s
-    # Scroll down so newly loaded cards may come into view / trigger lazy load
+    Run Keyword If    not ${loading_gone}    Wait Until Keyword Succeeds    5s    1s    Page Should Be Ready
     Execute Javascript    window.scrollBy(0, document.body.scrollHeight)
-    Sleep    3s
+    Wait Until Keyword Succeeds    5s    1s    Page Should Be Ready
 
 Verify Car Count Increased
     [Documentation]    Compare initial and updated car counts. Pass when count increased; when unchanged, pass only if no decrease (button worked, no more data or same batch).
