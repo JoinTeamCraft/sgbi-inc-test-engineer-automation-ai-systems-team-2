@@ -4,7 +4,7 @@ Library           SeleniumLibrary
 
 *** Variables ***
 # Prefer stable attributes (e.g. data-testid) from the frontend when available; complex XPath is brittle.
-# Advocate with the frontend team for test-specific attributes (e.g. data-testid) to replace fragile class-based selectors.
+# Prioritise working with the frontend team to add stable identifiers (e.g. data-testid) and replace these locators.
 # Add your application locators here
 # ${EXAMPLE_LOCATOR}    id=example
 
