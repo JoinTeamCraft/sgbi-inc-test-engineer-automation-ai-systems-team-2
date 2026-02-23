@@ -29,7 +29,3 @@ ${REGISTRATION_LAST_NAME_FIELD}    xpath=//input[@name='lastName']
 ${REGISTRATION_EMAIL_FIELD}    xpath=//input[@name='emailAddress']
 ${REGISTRATION_PASSWORD_FIELD}    xpath=//input[@name='password']
 ${REGISTRATION_CONTINUE_BUTTON}    xpath=//button[contains(@class,'formButton')]/span[text()='Continue']
-
-# Mandatory Field Validation Locators
-${REGISTRATION_EMAIL_FIELD_REQUIRED}           xpath=//input[@name='emailAddress' and @required]
-${REGISTRATION_PASSWORD_FIELD_REQUIRED}    xpath=//input[@name='password' and @required]
