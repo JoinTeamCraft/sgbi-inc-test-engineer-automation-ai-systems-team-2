@@ -1,4 +1,4 @@
-# Robot Framework output
+# Robot Framework output - do not commit: output.xml, log.html, report.html, screenshots
 results/*.html
 results/*.xml
 results/*.png

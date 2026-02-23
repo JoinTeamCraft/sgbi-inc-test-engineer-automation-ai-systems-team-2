@@ -172,7 +172,7 @@ Wait For Car Count To Increase
     [Return]    ${final}
 
 Wait For New Car Cards To Load
-    [Documentation]    Wait for new car cards to load after clicking Show More Cars. Poll for page ready and optional spinner; no fixed Sleep.
+    [Documentation]    Wait for new car cards to load after clicking Show More Cars. Poll for page ready and optional spinner gone; no fixed Sleep fallback.
     ${timeout}=    Get Config Value    LONG_TIMEOUT
     ${short_timeout}=    Get Config Value    SHORT_TIMEOUT
     Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
