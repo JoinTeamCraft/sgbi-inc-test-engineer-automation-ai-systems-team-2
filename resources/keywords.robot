@@ -63,7 +63,7 @@ Locate Home Page Car Cards
     ${medium_timeout}=    Get Config Value    MEDIUM_TIMEOUT
     Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
     Execute Javascript    window.scrollTo(0, document.body.scrollHeight/2)
-    Wait Until Keyword Succeeds    ${short_timeout}s    1s    Page Should Be Ready
+    Wait Until Keyword Succeeds    ${short_timeout}s    1s    Element Should Be Visible    ${HOME_PAGE_MAIN_CONTAINER}
     # Try multiple locator strategies with retries
     ${car_found}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${HOME_PAGE_CAR_CARD}    timeout=${medium_timeout}
     # If not found, try scrolling and alternative approaches
@@ -112,7 +112,7 @@ Verify Navigation After Rent Now Click
     ${base_url}=    Get Config Value    BASE_URL
     ${base_stripped}=    Evaluate    "${base_url}".rstrip("/")
     ${is_home_page}=    Evaluate    ("${current_url}".rstrip("/") == "${base_stripped}") or ("${current_url}" == "${base_stripped}" + "#")
-    # Prioritize element visibility: require car details container or title visible (no URL keyword matching)
+    # Prioritize element visibility: require car details container or title to be visible (no URL keyword matching)
     ${details_present}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${CAR_DETAILS_PAGE}    timeout=${timeout}
     ${title_present}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${CAR_DETAILS_TITLE}    timeout=${timeout}
     Should Be True    ${details_present} or ${title_present}    Navigation verification failed: car details page and title not visible. URL: ${current_url}
@@ -172,7 +172,7 @@ Wait For Car Count To Increase
     [Return]    ${final}
 
 Wait For New Car Cards To Load
-    [Documentation]    Wait for new car cards to load after clicking Show More Cars. No fixed Sleep; poll page ready and optional spinner.
+    [Documentation]    Wait for new car cards to load after clicking Show More Cars. Poll for page ready and optional spinner gone; no fixed Sleep fallback.
     ${timeout}=    Get Config Value    LONG_TIMEOUT
     ${short_timeout}=    Get Config Value    SHORT_TIMEOUT
     Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
@@ -320,9 +320,9 @@ Click Back In Booking Flow
 Verify Back To Previous Step
     [Documentation]    Verify that after clicking Back we are on the previous step (e.g. Step 2 or billing).
     ${timeout}=    Get Config Value    MEDIUM_TIMEOUT
+    ${short_timeout}=    Get Config Value    SHORT_TIMEOUT
     # After Back from Step 3 we expect Step 2 (Rental) or after Back from Step 2 we expect Step 1 (Billing)
     ${rental_visible}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${STEP2_RENTAL_LABEL}    timeout=${timeout}
-    ${short_timeout}=    Get Config Value    SHORT_TIMEOUT
     ${rental_input_visible}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${RENTAL_PICKUP_LOCATION}    timeout=${short_timeout}
     ${billing_visible}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${STEP1_BILLING_LABEL}    timeout=${short_timeout}
     ${billing_input_visible}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${BILLING_NAME_INPUT}    timeout=${short_timeout}

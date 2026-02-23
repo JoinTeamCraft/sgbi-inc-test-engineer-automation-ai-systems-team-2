@@ -3,8 +3,8 @@ Documentation     Template for common locators
 Library           SeleniumLibrary
 
 *** Variables ***
-# Prefer stable attributes (e.g. data-testid) when available; complex XPath is brittle.
-# Advocate with the frontend team for stable test identifiers (e.g. data-testid) to improve long-term robustness.
+# Prefer stable attributes (e.g. data-testid) from the frontend when available; complex XPath is brittle.
+# Prioritise working with the frontend team to add stable identifiers (e.g. data-testid) and replace these locators.
 # Add your application locators here
 # ${EXAMPLE_LOCATOR}    id=example
 
