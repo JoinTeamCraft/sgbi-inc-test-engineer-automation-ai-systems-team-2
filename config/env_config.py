@@ -26,6 +26,9 @@ class EnvConfig:
     SIGN_IN_NAVIGATION_SCREENSHOT = "Sign_In_Navigation.png"
     SIGN_UP_PAGE_TEXT = "Create your account"
     SIGN_UP_PAGE_SCREENSHOT = "Sign_Up_Page.png"
+    SIGN_UP_PAGE_MANDATORY_VALIDATION_SCREENSHOT = "Sign_Up_Page_Mandatory_Validation.png"
+    REQUIRED_ATTRIBUTE = "aria-required"
+    TRUE_VALUE = "true"
 
     # Navigation Config
     FAVORITES_PATH = "favourites"
