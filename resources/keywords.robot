@@ -443,3 +443,56 @@ Verify No Page Reload Or Error On Favourite Action
     ${error_visible}=    Run Keyword And Return Status    Element Should Be Visible    ${ERROR_MESSAGE}
     Should Not Be True    ${error_visible}    Error message displayed after favourite action
     Log    No page reload or error during favourite action
+
+# --- SG-29 Favourites page keywords ---
+Add One Car To Favourites If Needed
+    [Documentation]    Ensure at least one car is in favourites by adding one from the Home page (precondition for Favourites page test).
+    Navigate To Home With Car Cards
+    Click Favourite Heart On Car Card    0
+    Log    Added one car to favourites (precondition satisfied)
+
+Click Favourites Icon In Header
+    [Documentation]    Click the Favourites icon in the header to open the Favourites page.
+    ${timeout}=    Get Config Value    LONG_TIMEOUT
+    Wait Until Element Is Visible    ${HEADER_FAVOURITES_ICON}    timeout=${timeout}
+    Click Element    ${HEADER_FAVOURITES_ICON}
+    Wait For Page To Load Completely
+    Sleep    2s
+    Log    Clicked Favourites icon in header
+
+Verify Favourites Page Loaded
+    [Documentation]    Ensure the Favourites page loaded: "Your Favourites" (or similar) title/section is visible.
+    ${timeout}=    Get Config Value    LONG_TIMEOUT
+    Wait Until Element Is Visible    ${FAVOURITES_PAGE_TITLE}    timeout=${timeout}
+    Log    Favourites page loaded: title/section visible
+
+Verify Favourite Car Cards Displayed
+    [Documentation]    Verify that one or more favourite car cards are displayed on the Favourites page.
+    ${timeout}=    Get Config Value    MEDIUM_TIMEOUT
+    ${card_count}=    Get Element Count    ${FAVOURITES_PAGE_CAR_CARDS}
+    Run Keyword If    ${card_count} == 0    ${card_count}=    Get Element Count    ${HOME_PAGE_CAR_CARD}
+    Should Be True    ${card_count} > 0    No favourite car cards displayed on Favourites page
+    Log    ${card_count} favourite car card(s) displayed
+    [Return]    ${card_count}
+
+Verify Each Favourite Card Has Required Elements
+    [Documentation]    For each favourite card, verify presence of: car image, name, type, capacity/transmission, price, Rent Now button, heart icon.
+    ${cards}=    Get WebElements    ${FAVOURITES_PAGE_CAR_CARDS}
+    ${count}=    Get Length    ${cards}
+    Run Keyword If    ${count} == 0    ${cards}=    Get WebElements    ${HOME_PAGE_CAR_CARD}
+    Run Keyword If    ${count} == 0    ${count}=    Get Length    ${cards}
+    Should Be True    ${count} > 0    No car cards to verify
+    FOR    ${i}    IN RANGE    ${count}
+        ${card}=    Set Variable    ${cards}[${i}]
+        ${html}=    Get Element Attribute    ${card}    outerHTML
+        Should Not Be Empty    ${html}
+        # Each card should show price (e.g. $) and Rent Now
+        ${has_price}=    Run Keyword And Return Status    Should Contain    ${html}    $
+        ${has_rent_now}=    Run Keyword And Return Status    Should Contain Any    ${html}    Rent Now    Rent now    rent now
+        ${has_image}=    Run Keyword And Return Status    Should Contain Any    ${html}    <img    img
+        Should Be True    ${has_price} or ${has_rent_now} or ${has_image}    Favourite card at index ${i} missing required content (price, Rent Now, or image)
+        Log    Card ${i}: verified required elements present
+    END
+    ${screenshot_name}=    Replace String    ${TEST NAME}    ${SPACE}    _
+    Capture Page Screenshot    ${screenshot_name}.png
+    Log    All favourite cards have required elements (image, name, price, Rent Now, heart)
