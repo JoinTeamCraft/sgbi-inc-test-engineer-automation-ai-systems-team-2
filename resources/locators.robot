@@ -12,20 +12,31 @@ ${HOME_PAGE_LOGO}    xpath=//a/span[text()='MORENT']
 ${HOME_PAGE_MAIN_CONTAINER}    xpath=//main[contains(@class,'container')]
 ${HOME_PAGE_SEARCH_BAR}    xpath=//input[@type='search' and @placeholder='Search something here']
 
-# Header Locators
-${HEADER_SECTION}    xpath=//header[contains(@class,'header')]
-${FAVORITE_LINK}    xpath=//a[contains(@href,'/favourites')]//button[@aria-label='Favorite Icon']
-${ORDERS_LINK}    xpath=//a[contains(@href,'/orders')]//button[@aria-label='Notification Icon']
-${USER_SETTINGS_BUTTON}    xpath=//button[@aria-label='User Settings']
-${SIGN_IN_BUTTON}    xpath=//div[contains(@class,'user-sign')]
+*** Variables ***
 
-# Sign In Page Locators
-${SIGN_UP_LINK}    xpath=//a[contains(@href,'sign-up') and text()='Sign up']
+# ============ Home Page ============
 
-# Registration Page Locators
-${REGISTRATION_FORM}    xpath=//div[contains(@class,'componentContainer')]/div[contains(@data-clerk-component,'SignUp')]
-${REGISTRATION_FIRST_NAME_FIELD}    xpath=//input[@name='firstName']
-${REGISTRATION_LAST_NAME_FIELD}    xpath=//input[@name='lastName']
-${REGISTRATION_EMAIL_FIELD}    xpath=//input[@name='emailAddress']
-${REGISTRATION_PASSWORD_FIELD}    xpath=//input[@name='password']
-${REGISTRATION_CONTINUE_BUTTON}    xpath=//button[contains(@class,'formButton')]/span[text()='Continue']
+${SIGN_IN_BUTTON}                 xpath=//button[text()='Sign in']
+
+# ============ Sign In Page ============
+
+${SIGN_IN_EMAIL_INPUT}            xpath=//input[@placeholder='Enter your email address']
+${PASSWORD_FIELD}                 xpath=//input[@id='password-field']
+${CONTINUE_BUTTON}                xpath=//button[.//span[text()='Continue']]
+
+# ============ OTP ============
+${OTP_INPUT_FIELD}    xpath=//input[@data-input-otp='true']
+${OTP_CONTINUE_BUTTON}    xpath=//button[.//span[normalize-space()='Continue']]
+
+# ============ User Menu ============
+${USER_PROFILE_ICON}    xpath=//button[@data-clerk-component='UserButton']
+${MANAGE_ACCOUNT_BUTTON}          xpath=//button[contains(@class,'manageAccount') or contains(text(),'Manage account')]
+
+# ============ Add Email Flow ============
+
+${ADD_EMAIL_BUTTON}        xpath=//button[contains(@class,'cl-profileSectionPrimaryButton')]
+${NEW_EMAIL_INPUT}         xpath=//input[@placeholder='Enter your email address']
+${ADD_EMAIL_SUBMIT_BUTTON}      xpath=//button[@data-localization-key="userProfile.formButtonPrimary__add"]
+
+# ============ Verification Modal ============
+${VERIFICATION_MODAL_TEXT}      xpath=//*[contains(text(),"Verify email address")]
