@@ -137,3 +137,29 @@ Verify Registration Form Fields Presence
     Element Should Be Visible    ${REGISTRATION_EMAIL_FIELD}
     Element Should Be Visible    ${REGISTRATION_PASSWORD_FIELD}
     Element Should Be Visible    ${REGISTRATION_CONTINUE_BUTTON}
+
+Verify Mandatory Field Validation Messages
+    [Documentation]    Verify validation messages when required fields are empty and ensure that the user cannot proceed to the next step.
+    
+    ${timeout}=    Get Config Value    LONG_TIMEOUT
+    # Click Continue without entering data
+    Click Element    ${REGISTRATION_CONTINUE_BUTTON}
+
+    # Validate for Email address and Password fields for mandatory check    
+    ${email_validation}=    Get Element Attribute    ${REGISTRATION_EMAIL_FIELD}    validationMessage
+    Should Not Be Empty    ${email_validation}
+    ${password_validation}=    Get Element Attribute    ${REGISTRATION_PASSWORD_FIELD}    validationMessage
+    Should Not Be Empty    ${password_validation}
+
+    # Ensure user stays on Registration page
+    Wait Until Element Is Visible    ${REGISTRATION_FORM}    ${timeout}
+    ${sign_up_page_mandatory}=    Get Config Value    SIGN_UP_PAGE_MANDATORY_VALIDATION_SCREENSHOT
+    ${screenshot_name}=    Replace String    ${TEST NAME}    ${SPACE}    _
+    Capture Page Screenshot    ${screenshot_name}_${sign_up_page_mandatory}
+
+Clear Registration Form Fields
+    [Documentation]    Clear all input fields on the Registration form to ensure they are empty before validation.
+    Clear Element Text    ${REGISTRATION_FIRST_NAME_FIELD}
+    Clear Element Text    ${REGISTRATION_LAST_NAME_FIELD}
+    Clear Element Text    ${REGISTRATION_EMAIL_FIELD}
+    Clear Element Text    ${REGISTRATION_PASSWORD_FIELD}
