@@ -59,11 +59,11 @@ Take Screenshot On Failure
 Locate Home Page Car Cards
     [Documentation]    Locates and verifies that car cards are displayed on the Home page
     ${timeout}=    Get Config Value    LONG_TIMEOUT
-    # Wait for any dynamic content to load
-    Sleep    3s
+    # Wait for dynamic content: use dynamic wait instead of fixed sleep
+    Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
     # Scroll down to ensure car cards are in view
     Execute Javascript    window.scrollTo(0, document.body.scrollHeight/2)
-    Sleep    2s
+    Wait Until Keyword Succeeds    5s    1s    Element Should Be Visible    ${HOME_PAGE_MAIN_CONTAINER}
     # Try multiple locator strategies with retries
     ${car_found}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${HOME_PAGE_CAR_CARD}    timeout=10s
     # If not found, try scrolling and alternative approaches
@@ -84,14 +84,14 @@ Scroll To Find Car Cards
     [Documentation]    Scrolls the page to find car cards if they're not immediately visible
     FOR    ${i}    IN RANGE    5
         Execute Javascript    window.scrollBy(0, 400)
-        Sleep    1.5s
+        Wait Until Keyword Succeeds    2s    0.5s    Page Should Be Ready
         ${car_count}=    Get Element Count    ${HOME_PAGE_CAR_CARD}
         ${rent_now_count}=    Get Element Count    ${HOME_PAGE_RENT_NOW_BUTTON}
         Exit For Loop If    ${car_count} > 0 or ${rent_now_count} > 0
     END
     # Scroll back to top if needed
     Execute Javascript    window.scrollTo(0, 0)
-    Sleep    1s
+    Wait Until Keyword Succeeds    2s    0.5s    Page Should Be Ready
 
 Click Rent Now Button On Car Card
     [Documentation]    Clicks the Rent Now button on a car card from the Home page
@@ -108,10 +108,12 @@ Verify Navigation After Rent Now Click
     [Documentation]    Verifies that the page has navigated after clicking the Rent Now button
     ${timeout}=    Get Config Value    LONG_TIMEOUT
     Wait For Page To Load Completely
-    Sleep    2s
+    Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
     # Verify that we've navigated away from the home page by checking URL
     ${current_url}=    Get Location
-    ${is_home_page}=    Evaluate    "${current_url}" == "https://morent-car.archisacademy.com/" or "${current_url}" == "https://morent-car.archisacademy.com/#" or "${current_url}" == "https://morent-car.archisacademy.com"
+    ${base_url}=    Get Config Value    BASE_URL
+    ${base_stripped}=    Evaluate    "${base_url}".rstrip("/")
+    ${is_home_page}=    Evaluate    ("${current_url}".rstrip("/") == "${base_stripped}") or ("${current_url}" == "${base_stripped}" + "#")
     # Check for car details or booking page elements with multiple strategies
     ${details_present}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${CAR_DETAILS_PAGE}    timeout=${timeout}
     ${title_present}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${CAR_DETAILS_TITLE}    timeout=${timeout}

@@ -3,6 +3,7 @@ Documentation     Template for common locators
 Library           SeleniumLibrary
 
 *** Variables ***
+# Prefer data-testid or other stable attributes from the frontend when available.
 # Add your application locators here
 # ${EXAMPLE_LOCATOR}    id=example
 
