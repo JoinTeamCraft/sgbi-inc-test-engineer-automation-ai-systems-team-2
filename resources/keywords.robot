@@ -123,8 +123,9 @@ Verify Navigation After Rent Now Click
 # --- SG-26 Show More Cars keywords ---
 Scroll To Car Listing Section
     [Documentation]    Scroll down to the car listing section on the Home page
+    ${short_timeout}=    Get Config Value    SHORT_TIMEOUT
     Execute Javascript    window.scrollTo(0, document.body.scrollHeight / 2)
-    Wait Until Keyword Succeeds    5s    1s    Page Should Be Ready
+    Wait Until Keyword Succeeds    ${short_timeout}s    1s    Page Should Be Ready
     FOR    ${i}    IN RANGE    4
         ${show_more_visible}=    Run Keyword And Return Status    Element Should Be Visible    ${HOME_PAGE_SHOW_MORE_CARS_BUTTON}
         Exit For Loop If    ${show_more_visible}

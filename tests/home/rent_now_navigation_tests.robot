@@ -30,3 +30,22 @@ SG-25 Verify Rent Now Button Navigation from Home Page Car Card
     Locate Home Page Car Cards
     Click Rent Now Button On Car Card    0
     Verify Navigation After Rent Now Click
+
+SG-25 Verify Rent Now From First Middle And Last Car Card
+    [Documentation]    Verify Rent Now navigation from first, middle, and last car card to improve coverage.
+    [Tags]    home    navigation    rent_now    parameterized
+    Open MoRent Application
+    Verify No Browser Error
+    Verify Home Page Loaded Successfully
+    Wait For Page To Load Completely
+    ${count}=    Locate Home Page Car Cards
+    Should Be True    ${count} >= 1    Need at least one car card to run parameterized Rent Now test
+    ${middle}=    Evaluate    ${count} // 2
+    ${last}=    Evaluate    ${count} - 1
+    FOR    ${idx}    IN    0    ${middle}    ${last}
+        Run Keyword If    ${idx} > 0    Go Back
+        Run Keyword If    ${idx} > 0    Wait For Page To Load Completely
+        Run Keyword If    ${idx} > 0    Locate Home Page Car Cards
+        Click Rent Now Button On Car Card    ${idx}
+        Verify Navigation After Rent Now Click
+    END
