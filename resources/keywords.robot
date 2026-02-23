@@ -59,13 +59,13 @@ Take Screenshot On Failure
 Locate Home Page Car Cards
     [Documentation]    Locates and verifies that car cards are displayed on the Home page
     ${timeout}=    Get Config Value    LONG_TIMEOUT
-    # Wait for any dynamic content to load
-    Sleep    3s
-    # Scroll down to ensure car cards are in view
+    ${short_timeout}=    Get Config Value    SHORT_TIMEOUT
+    ${medium_timeout}=    Get Config Value    MEDIUM_TIMEOUT
+    Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
     Execute Javascript    window.scrollTo(0, document.body.scrollHeight/2)
-    Sleep    2s
+    Wait Until Keyword Succeeds    ${short_timeout}s    1s    Element Should Be Visible    ${HOME_PAGE_MAIN_CONTAINER}
     # Try multiple locator strategies with retries
-    ${car_found}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${HOME_PAGE_CAR_CARD}    timeout=10s
+    ${car_found}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${HOME_PAGE_CAR_CARD}    timeout=${medium_timeout}
     # If not found, try scrolling and alternative approaches
     Run Keyword If    ${car_found} == ${False}    Scroll To Find Car Cards
     # Check if we found car cards or Rent Now buttons
@@ -84,14 +84,13 @@ Scroll To Find Car Cards
     [Documentation]    Scrolls the page to find car cards if they're not immediately visible
     FOR    ${i}    IN RANGE    5
         Execute Javascript    window.scrollBy(0, 400)
-        Sleep    1.5s
+        Wait Until Keyword Succeeds    2s    0.5s    Page Should Be Ready
         ${car_count}=    Get Element Count    ${HOME_PAGE_CAR_CARD}
         ${rent_now_count}=    Get Element Count    ${HOME_PAGE_RENT_NOW_BUTTON}
         Exit For Loop If    ${car_count} > 0 or ${rent_now_count} > 0
     END
-    # Scroll back to top if needed
     Execute Javascript    window.scrollTo(0, 0)
-    Sleep    1s
+    Wait Until Keyword Succeeds    2s    0.5s    Page Should Be Ready
 
 Click Rent Now Button On Car Card
     [Documentation]    Clicks the Rent Now button on a car card from the Home page
@@ -105,38 +104,34 @@ Click Rent Now Button On Car Card
     Click Element    ${rent_now_buttons}[${card_index}]
 
 Verify Navigation After Rent Now Click
-    [Documentation]    Verifies that the page has navigated after clicking the Rent Now button
+    [Documentation]    Verifies that the page has navigated to car details/booking by asserting element visibility (BASE_URL from config).
     ${timeout}=    Get Config Value    LONG_TIMEOUT
     Wait For Page To Load Completely
-    Sleep    2s
-    # Verify that we've navigated away from the home page by checking URL
+    Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
     ${current_url}=    Get Location
-    ${is_home_page}=    Evaluate    "${current_url}" == "https://morent-car.archisacademy.com/" or "${current_url}" == "https://morent-car.archisacademy.com/#" or "${current_url}" == "https://morent-car.archisacademy.com"
-    # Check for car details or booking page elements with multiple strategies
+    ${base_url}=    Get Config Value    BASE_URL
+    ${base_stripped}=    Evaluate    "${base_url}".rstrip("/")
+    ${is_home_page}=    Evaluate    ("${current_url}".rstrip("/") == "${base_stripped}") or ("${current_url}" == "${base_stripped}" + "#")
+    # Prioritize element visibility: require car details container or title to be visible (no URL keyword matching)
     ${details_present}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${CAR_DETAILS_PAGE}    timeout=${timeout}
     ${title_present}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${CAR_DETAILS_TITLE}    timeout=${timeout}
-    # Alternative: check if URL changed or contains car/detail/booking keywords
-    ${url_changed}=    Evaluate    not ${is_home_page}
-    ${url_has_car_keywords}=    Evaluate    "car" in "${current_url}".lower() or "detail" in "${current_url}".lower() or "booking" in "${current_url}".lower() or "/cars/" in "${current_url}".lower()
-    # Log for debugging
-    Log    Current URL: ${current_url}
-    Log    Details present: ${details_present}, Title present: ${title_present}, URL changed: ${url_changed}
-    # Accept if URL changed OR if details/title elements are present
-    Should Be True    ${url_changed} or ${details_present} or ${title_present} or ${url_has_car_keywords}    Navigation verification failed. URL: ${current_url}, Details: ${details_present}, Title: ${title_present}
+    Should Be True    ${details_present} or ${title_present}    Navigation verification failed: car details page and title not visible. URL: ${current_url}
+    Run Keyword If    ${is_home_page}    Wait Until Element Is Visible    ${CAR_DETAILS_TITLE}    timeout=${timeout}
+    Log    Current URL: ${current_url}; car details page verified
     ${screenshot_name}=    Replace String    ${TEST NAME}    ${SPACE}    _
     Capture Page Screenshot    ${screenshot_name}.png
 
 # --- SG-26 Show More Cars keywords ---
 Scroll To Car Listing Section
     [Documentation]    Scroll down to the car listing section on the Home page
+    ${short_timeout}=    Get Config Value    SHORT_TIMEOUT
     Execute Javascript    window.scrollTo(0, document.body.scrollHeight / 2)
-    Sleep    2s
-    # Scroll until Show More Cars or car cards are in view
+    Wait Until Keyword Succeeds    ${short_timeout}s    1s    Page Should Be Ready
     FOR    ${i}    IN RANGE    4
         ${show_more_visible}=    Run Keyword And Return Status    Element Should Be Visible    ${HOME_PAGE_SHOW_MORE_CARS_BUTTON}
         Exit For Loop If    ${show_more_visible}
         Execute Javascript    window.scrollBy(0, 350)
-        Sleep    1s
+        Wait Until Keyword Succeeds    2s    0.5s    Page Should Be Ready
     END
 
 Verify Show More Cars Button Visible And Clickable
@@ -167,7 +162,7 @@ Wait For Car Count To Increase
     [Arguments]    ${initial_count}
     ${timeout}=    Get Config Value    LONG_TIMEOUT
     FOR    ${i}    IN RANGE    0    ${timeout}    2
-        Sleep    2s
+        Wait Until Keyword Succeeds    2s    0.5s    Page Should Be Ready
         ${current}=    Get Element Count    ${HOME_PAGE_CAR_CARD}
         ${current}=    Run Keyword If    ${current} == 0    Get Element Count    ${HOME_PAGE_RENT_NOW_BUTTON}    ELSE    Set Variable    ${current}
         Return From Keyword If    ${current} > ${initial_count}    ${current}
@@ -177,17 +172,14 @@ Wait For Car Count To Increase
     [Return]    ${final}
 
 Wait For New Car Cards To Load
-    [Documentation]    Wait for new car cards to load after clicking Show More Cars
+    [Documentation]    Wait for new car cards to load after clicking Show More Cars. Poll for page ready and optional spinner gone; no fixed Sleep fallback.
     ${timeout}=    Get Config Value    LONG_TIMEOUT
-    Sleep    2s
+    ${short_timeout}=    Get Config Value    SHORT_TIMEOUT
     Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
-    Sleep    3s
-    # Wait for loading indicator to disappear if present
-    ${loading_gone}=    Run Keyword And Return Status    Wait Until Element Is Not Visible    ${LOADING_SPINNER}    timeout=5s
-    Run Keyword If    not ${loading_gone}    Sleep    3s
-    # Scroll down so newly loaded cards may come into view / trigger lazy load
+    Wait Until Keyword Succeeds    ${short_timeout}s    1s    Page Should Be Ready
+    Run Keyword And Ignore Error    Wait Until Element Is Not Visible    ${LOADING_SPINNER}    timeout=${short_timeout}
     Execute Javascript    window.scrollBy(0, document.body.scrollHeight)
-    Sleep    3s
+    Wait Until Keyword Succeeds    ${short_timeout}s    1s    Page Should Be Ready
 
 Verify Car Count Increased
     [Documentation]    Compare initial and updated car counts. Pass when count increased; when unchanged, pass only if no decrease (button worked, no more data or same batch).
@@ -216,10 +208,10 @@ Perform Car Search And Navigate To Car Details
     ${pickup}=    Get Config Value    DEFAULT_PICKUP_LOCATION
     Wait Until Element Is Visible    ${HOME_PAGE_SEARCH_BAR}    timeout=${timeout}
     Input Text    ${HOME_PAGE_SEARCH_BAR}    ${pickup}
-    Sleep    1s
+    Wait Until Keyword Succeeds    3s    0.5s    Page Should Be Ready
     Click Element    ${HOME_SEARCH_BUTTON}
     Wait For Page To Load Completely
-    Sleep    3s
+    Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
     Locate Home Page Car Cards
     Click Rent Now Button On Car Card    0
     Verify Navigation After Rent Now Click
@@ -229,13 +221,13 @@ Click Rent Now On Car Details To Start Booking
     [Documentation]    On Car Details page, click Rent Now to start the booking process (Step 1).
     ${timeout}=    Get Config Value    LONG_TIMEOUT
     Wait For Page To Load Completely
-    Sleep    2s
+    Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
     Wait Until Element Is Visible    ${CAR_DETAILS_RENT_NOW_BUTTON}    timeout=${timeout}
     Scroll Element Into View    ${CAR_DETAILS_RENT_NOW_BUTTON}
-    Sleep    1s
+    Wait Until Keyword Succeeds    3s    0.5s    Page Should Be Ready
     Click Element    ${CAR_DETAILS_RENT_NOW_BUTTON}
     Wait For Page To Load Completely
-    Sleep    3s
+    Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
     Capture Page Screenshot    after_rent_now_click.png
     Wait For Booking Step 1 Form
     Log    Started booking flow
@@ -265,11 +257,11 @@ Fill Billing Information Step1
     Scroll Element Into View    ${BILLING_NAME_INPUT}
     Clear Element Text    ${BILLING_NAME_INPUT}
     Input Text    ${BILLING_NAME_INPUT}    ${name}
-    Run Keyword And Ignore Error    Clear Element Text    ${BILLING_PHONE_INPUT}
+    Clear Element Text    ${BILLING_PHONE_INPUT}
     Input Text    ${BILLING_PHONE_INPUT}    ${phone}
-    Run Keyword And Ignore Error    Clear Element Text    ${BILLING_ADDRESS_INPUT}
+    Clear Element Text    ${BILLING_ADDRESS_INPUT}
     Input Text    ${BILLING_ADDRESS_INPUT}    ${address}
-    Run Keyword And Ignore Error    Clear Element Text    ${BILLING_CITY_INPUT}
+    Clear Element Text    ${BILLING_CITY_INPUT}
     Input Text    ${BILLING_CITY_INPUT}    ${city}
     Log    Filled billing: Name, Phone, Address, City
 
@@ -279,7 +271,7 @@ Click Next In Booking Flow
     Wait Until Element Is Visible    ${BOOKING_NEXT_BUTTON}    timeout=${timeout}
     Click Element    ${BOOKING_NEXT_BUTTON}
     Wait For Page To Load Completely
-    Sleep    2s
+    Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
     Log    Clicked Next
 
 Verify Booking Step Is Rental Information
@@ -308,12 +300,12 @@ Fill Rental Information Step2
     ${pickup_time}=    Get Config Value    RENTAL_PICKUP_TIME
     ${dropoff_time}=    Get Config Value    RENTAL_DROPOFF_TIME
     Wait For Page To Load Completely
-    Run Keyword And Ignore Error    Input Text    ${RENTAL_PICKUP_LOCATION}    ${pickup_loc}
-    Run Keyword And Ignore Error    Input Text    ${RENTAL_DROPOFF_LOCATION}    ${dropoff_loc}
-    Run Keyword And Ignore Error    Input Text    ${RENTAL_PICKUP_DATE}    ${pickup_date}
-    Run Keyword And Ignore Error    Input Text    ${RENTAL_DROPOFF_DATE}    ${dropoff_date}
-    Run Keyword And Ignore Error    Input Text    ${RENTAL_PICKUP_TIME}    ${pickup_time}
-    Run Keyword And Ignore Error    Input Text    ${RENTAL_DROPOFF_TIME}    ${dropoff_time}
+    Input Text    ${RENTAL_PICKUP_LOCATION}    ${pickup_loc}
+    Input Text    ${RENTAL_DROPOFF_LOCATION}    ${dropoff_loc}
+    Input Text    ${RENTAL_PICKUP_DATE}    ${pickup_date}
+    Input Text    ${RENTAL_DROPOFF_DATE}    ${dropoff_date}
+    Input Text    ${RENTAL_PICKUP_TIME}    ${pickup_time}
+    Input Text    ${RENTAL_DROPOFF_TIME}    ${dropoff_time}
     Log    Filled rental: locations, dates, times
 
 Click Back In Booking Flow
@@ -322,17 +314,18 @@ Click Back In Booking Flow
     Wait Until Element Is Visible    ${BOOKING_BACK_BUTTON}    timeout=${timeout}
     Click Element    ${BOOKING_BACK_BUTTON}
     Wait For Page To Load Completely
-    Sleep    2s
+    Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
     Log    Clicked Back
 
 Verify Back To Previous Step
     [Documentation]    Verify that after clicking Back we are on the previous step (e.g. Step 2 or billing).
     ${timeout}=    Get Config Value    MEDIUM_TIMEOUT
+    ${short_timeout}=    Get Config Value    SHORT_TIMEOUT
     # After Back from Step 3 we expect Step 2 (Rental) or after Back from Step 2 we expect Step 1 (Billing)
     ${rental_visible}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${STEP2_RENTAL_LABEL}    timeout=${timeout}
-    ${rental_input_visible}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${RENTAL_PICKUP_LOCATION}    timeout=5s
-    ${billing_visible}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${STEP1_BILLING_LABEL}    timeout=5s
-    ${billing_input_visible}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${BILLING_NAME_INPUT}    timeout=5s
+    ${rental_input_visible}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${RENTAL_PICKUP_LOCATION}    timeout=${short_timeout}
+    ${billing_visible}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${STEP1_BILLING_LABEL}    timeout=${short_timeout}
+    ${billing_input_visible}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${BILLING_NAME_INPUT}    timeout=${short_timeout}
     Should Be True    ${rental_visible} or ${rental_input_visible} or ${billing_visible} or ${billing_input_visible}    Back navigation did not show previous step
     Log    Verified back to previous step
 
@@ -360,17 +353,16 @@ Log In With Valid Credentials
     Wait Until Element Is Visible    ${LOGIN_EMAIL_INPUT}    timeout=${timeout}
     Input Text    ${LOGIN_EMAIL_INPUT}    ${email}
     Input Password    ${LOGIN_PASSWORD_INPUT}    ${password}
-    Sleep    1s
+    Wait Until Keyword Succeeds    3s    0.5s    Page Should Be Ready
     ${submit_ok}=    Run Keyword And Return Status    Click Element    ${LOGIN_SUBMIT_BUTTON}
     Run Keyword Unless    ${submit_ok}    Execute Javascript    document.querySelector('button[type="submit"]') && document.querySelector('button[type="submit"]').click();
     Wait For Page To Load Completely
-    Sleep    2s
-    # If OTP field appears, fill it
+    Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
     ${otp_visible}=    Run Keyword And Return Status    Element Should Be Visible    ${LOGIN_OTP_INPUT}
     Run Keyword If    ${otp_visible}    Input Text    ${LOGIN_OTP_INPUT}    ${otp}
     Run Keyword If    ${otp_visible}    Click Element    ${LOGIN_SUBMIT_BUTTON}
     Run Keyword If    ${otp_visible}    Wait For Page To Load Completely
-    Run Keyword If    ${otp_visible}    Sleep    2s
+    Run Keyword If    ${otp_visible}    Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
     Log    Logged in with valid credentials
 
 Open Login And Wait
@@ -379,7 +371,7 @@ Open Login And Wait
     Wait Until Element Is Visible    ${LOGIN_LINK_OR_BUTTON}    timeout=${timeout}
     Click Element    ${LOGIN_LINK_OR_BUTTON}
     Wait For Page To Load Completely
-    Sleep    2s
+    Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
     Wait Until Element Is Visible    ${LOGIN_EMAIL_INPUT}    timeout=${timeout}
     Log    Login form opened
 
@@ -397,7 +389,7 @@ Select Car Card Favourite Heart Not Favourited
     [Arguments]    ${card_index}=0
     ${timeout}=    Get Config Value    LONG_TIMEOUT
     Wait For Page To Load Completely
-    Sleep    2s
+    Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
     Scroll To Car Listing Section
     ${hearts}=    Get WebElements    ${CAR_CARD_FAVOURITE_HEART}
     ${heart_count}=    Get Length    ${hearts}
@@ -408,7 +400,7 @@ Select Car Card Favourite Heart Not Favourited
     ${idx}=    Set Variable    ${card_index}
     ${click_target}=    Set Variable    ${hearts}[${idx}]
     Scroll Element Into View    ${click_target}
-    Sleep    1s
+    Wait Until Keyword Succeeds    3s    0.5s    Page Should Be Ready
     [Return]    ${click_target}
 
 Click Favourite Heart On Car Card
@@ -417,14 +409,15 @@ Click Favourite Heart On Car Card
     ${heart}=    Select Car Card Favourite Heart Not Favourited    ${card_index}
     # Use JS click to avoid "element not interactable" when icon is SVG or covered
     Execute Javascript    arguments[0].click();    ${heart}
-    Sleep    2s
+    Wait Until Keyword Succeeds    5s    1s    Page Should Be Ready
     Wait For Page To Load Completely
     Log    Clicked favourite heart on car card
 
 Verify Favourite Heart State After Click
     [Documentation]    Verify the heart icon reflects favourite status after clicking (filled/active or still visible; no error).
     ${timeout}=    Get Config Value    MEDIUM_TIMEOUT
-    ${filled}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${FAVOURITE_HEART_FILLED}    timeout=5s
+    ${short_timeout}=    Get Config Value    SHORT_TIMEOUT
+    ${filled}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${FAVOURITE_HEART_FILLED}    timeout=${short_timeout}
     ${heart_visible}=    Run Keyword And Return Status    Element Should Be Visible    ${CAR_CARD_FAVOURITE_HEART}
     ${heart_visible}=    Run Keyword If    not ${heart_visible}    Run Keyword And Return Status    Element Should Be Visible    ${FAVOURITE_HEART_ICON}    ELSE    Set Variable    ${heart_visible}
     Should Be True    ${filled} or ${heart_visible}    Heart icon state could not be verified
@@ -435,7 +428,7 @@ Verify Favourite Heart State After Click
 Verify No Page Reload Or Error On Favourite Action
     [Documentation]    Ensure no full page reload or error occurred during the add-to-favourites action.
     ${url_before}=    Get Location
-    Sleep    1s
+    Wait Until Keyword Succeeds    3s    0.5s    Page Should Be Ready
     ${url_after}=    Get Location
     # Page should still show home/car listing (no error URL or blank)
     Should Not Contain    ${url_after}    error
@@ -457,7 +450,7 @@ Click Favourites Icon In Header
     Wait Until Element Is Visible    ${HEADER_FAVOURITES_ICON}    timeout=${timeout}
     Click Element    ${HEADER_FAVOURITES_ICON}
     Wait For Page To Load Completely
-    Sleep    2s
+    Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
     Log    Clicked Favourites icon in header
 
 Verify Favourites Page Loaded
@@ -522,9 +515,9 @@ Click Heart On Favourites Page To Remove From Favourites
     Should Be True    ${heart_count} > 0    No heart icon found on Favourites page to remove
     ${heart}=    Set Variable    ${hearts}[${card_index}]
     Scroll Element Into View    ${heart}
-    Sleep    1s
+    Wait Until Keyword Succeeds    3s    0.5s    Page Should Be Ready
     Execute Javascript    arguments[0].click();    ${heart}
-    Sleep    2s
+    Wait Until Keyword Succeeds    5s    1s    Page Should Be Ready
     Wait For Page To Load Completely
     Log    Clicked heart to remove car from favourites
 
