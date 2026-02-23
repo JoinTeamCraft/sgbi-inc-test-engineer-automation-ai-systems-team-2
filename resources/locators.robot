@@ -45,6 +45,19 @@ ${RENTAL_DROPOFF_TIME}    xpath=//input[@type='time' or contains(@placeholder, '
 ${STEP1_BILLING_LABEL}    xpath=//*[contains(text(), 'Billing') or contains(text(), 'billing') or contains(., 'Step 1')]
 ${STEP2_RENTAL_LABEL}    xpath=//*[contains(text(), 'Rental Information') or contains(text(), 'Rental') or contains(., 'Step 2')]
 
+# Login (SG-28 and preconditions)
+${LOGIN_LINK_OR_BUTTON}    xpath=//a[contains(text(), 'Sign in') or contains(text(), 'Login') or contains(., 'Sign in') or contains(., 'Login')] | //button[contains(text(), 'Sign in') or contains(text(), 'Login') or contains(., 'Sign in') or contains(., 'Login')]
+${LOGIN_EMAIL_INPUT}    xpath=//input[@type='email' or @name='email' or @id='email' or contains(@placeholder, 'email') or contains(@placeholder, 'Email')]
+${LOGIN_PASSWORD_INPUT}    xpath=//input[@type='password' or @name='password' or @id='password' or contains(@placeholder, 'password') or contains(@placeholder, 'Password')]
+${LOGIN_SUBMIT_BUTTON}    xpath=//button[@type='submit' and (contains(text(), 'Sign in') or contains(text(), 'Login') or contains(., 'Sign in') or contains(., 'Login'))] | //button[@type='submit'] | //input[@type='submit'] | //*[@type='submit']
+${LOGIN_OTP_INPUT}    xpath=//input[@type='text' and (contains(@placeholder, 'OTP') or contains(@placeholder, 'code') or @name='otp' or @id='otp')] | //input[contains(@placeholder, 'OTP') or contains(@placeholder, 'Code')]
+${USER_MENU_OR_AVATAR}    xpath=//*[contains(@class, 'avatar') or contains(@class, 'user') or contains(@class, 'profile') or contains(@aria-label, 'user')] | //img[contains(@alt, 'user') or contains(@alt, 'avatar')]
+
+# Add to Favourites (SG-28) – heart icon on car cards
+${CAR_CARD_FAVOURITE_HEART}    xpath=(//div[contains(@class, 'car-card') or contains(@class, 'carCard') or contains(@class, 'card')])//*[local-name()='svg' and (contains(@class, 'heart') or contains(@class, 'favourite') or contains(@class, 'favorite') or contains(@class, 'like') or @aria-label='favourite' or @aria-label='Favorite' or @data-testid='favourite' or @data-testid='favorite')] | (//div[contains(@class, 'car-card') or contains(@class, 'card')])//button[.//*[local-name()='svg'] or contains(@aria-label, 'favour') or contains(@aria-label, 'favor') or contains(@aria-label, 'like')] | (//*[.//button[contains(text(), 'Rent Now')]])//*[local-name()='svg' or self::button][contains(@class, 'heart') or contains(@class, 'favour') or contains(@class, 'favor') or contains(@aria-label, 'favour') or contains(@aria-label, 'favor')]
+${FAVOURITE_HEART_ICON}    xpath=//*[local-name()='svg'][contains(@class, 'heart') or contains(@class, 'favourite') or contains(@class, 'favorite') or contains(@class, 'like')] | //button[.//*[local-name()='svg']][contains(@aria-label, 'favour') or contains(@aria-label, 'favor') or contains(@aria-label, 'like')] | //*[@aria-label='Add to favourites' or @aria-label='Add to favorites' or @title='Favourite' or @title='Favorite']
+${FAVOURITE_HEART_FILLED}    xpath=//*[local-name()='svg'][contains(@class, 'fill') or contains(@class, 'filled') or .//*[local-name()='path' and contains(@fill, 'currentColor')]] | //*[contains(@class, 'active') or contains(@class, 'selected')][.//*[local-name()='svg']]
+
 # Common Locators
 ${LOADING_SPINNER}           xpath=//div[contains(@class, 'loading')]
 ${ERROR_MESSAGE}             xpath=//div[contains(@class, 'error')]

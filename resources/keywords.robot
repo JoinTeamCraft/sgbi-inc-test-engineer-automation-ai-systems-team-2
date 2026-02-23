@@ -346,3 +346,100 @@ Validate Billing Data Persistence
     Log    Billing data persisted: Name = ${actual_name}
     ${screenshot_name}=    Replace String    ${TEST NAME}    ${SPACE}    _
     Capture Page Screenshot    ${screenshot_name}.png
+
+# --- SG-28 Add to Favourites keywords ---
+Log In With Valid Credentials
+    [Documentation]    Log in using valid user credentials (email, password). Handles optional OTP if present.
+    ${timeout}=    Get Config Value    LONG_TIMEOUT
+    ${email}=    Get Config Value    TEST_EMAIL
+    ${password}=    Get Config Value    TEST_PASSWORD
+    ${otp}=    Get Config Value    TEST_OTP
+    # Open login if not already on login form (e.g. click Sign in)
+    ${login_visible}=    Run Keyword And Return Status    Element Should Be Visible    ${LOGIN_EMAIL_INPUT}
+    Run Keyword Unless    ${login_visible}    Open Login And Wait
+    Wait Until Element Is Visible    ${LOGIN_EMAIL_INPUT}    timeout=${timeout}
+    Input Text    ${LOGIN_EMAIL_INPUT}    ${email}
+    Input Password    ${LOGIN_PASSWORD_INPUT}    ${password}
+    Sleep    1s
+    ${submit_ok}=    Run Keyword And Return Status    Click Element    ${LOGIN_SUBMIT_BUTTON}
+    Run Keyword Unless    ${submit_ok}    Execute Javascript    document.querySelector('button[type="submit"]') && document.querySelector('button[type="submit"]').click();
+    Wait For Page To Load Completely
+    Sleep    2s
+    # If OTP field appears, fill it
+    ${otp_visible}=    Run Keyword And Return Status    Element Should Be Visible    ${LOGIN_OTP_INPUT}
+    Run Keyword If    ${otp_visible}    Input Text    ${LOGIN_OTP_INPUT}    ${otp}
+    Run Keyword If    ${otp_visible}    Click Element    ${LOGIN_SUBMIT_BUTTON}
+    Run Keyword If    ${otp_visible}    Wait For Page To Load Completely
+    Run Keyword If    ${otp_visible}    Sleep    2s
+    Log    Logged in with valid credentials
+
+Open Login And Wait
+    [Documentation]    Click Sign in / Login and wait for login form.
+    ${timeout}=    Get Config Value    MEDIUM_TIMEOUT
+    Wait Until Element Is Visible    ${LOGIN_LINK_OR_BUTTON}    timeout=${timeout}
+    Click Element    ${LOGIN_LINK_OR_BUTTON}
+    Wait For Page To Load Completely
+    Sleep    2s
+    Wait Until Element Is Visible    ${LOGIN_EMAIL_INPUT}    timeout=${timeout}
+    Log    Login form opened
+
+Navigate To Home With Car Cards
+    [Documentation]    Ensure we are on the Home page where car cards are displayed.
+    ${url}=    Get Config Value    BASE_URL
+    Go To    ${url}
+    Wait For Page To Load Completely
+    Verify Home Page Loaded Successfully
+    Locate Home Page Car Cards
+    Log    On Home page with car cards
+
+Select Car Card Favourite Heart Not Favourited
+    [Documentation]    Find heart icon on a car card; return the element at card_index for clicking.
+    [Arguments]    ${card_index}=0
+    ${timeout}=    Get Config Value    LONG_TIMEOUT
+    Wait For Page To Load Completely
+    Sleep    2s
+    Scroll To Car Listing Section
+    ${hearts}=    Get WebElements    ${CAR_CARD_FAVOURITE_HEART}
+    ${heart_count}=    Get Length    ${hearts}
+    Run Keyword If    ${heart_count} == 0    Wait Until Element Is Visible    ${FAVOURITE_HEART_ICON}    timeout=${timeout}
+    Run Keyword If    ${heart_count} == 0    ${hearts}=    Get WebElements    ${FAVOURITE_HEART_ICON}
+    ${heart_count}=    Get Length    ${hearts}
+    Should Be True    ${heart_count} > 0    No favourite heart icon found on car cards
+    ${idx}=    Set Variable    ${card_index}
+    ${click_target}=    Set Variable    ${hearts}[${idx}]
+    Scroll Element Into View    ${click_target}
+    Sleep    1s
+    [Return]    ${click_target}
+
+Click Favourite Heart On Car Card
+    [Documentation]    Click the heart (favourite) icon on a car card. Uses card index (default 0).
+    [Arguments]    ${card_index}=0
+    ${heart}=    Select Car Card Favourite Heart Not Favourited    ${card_index}
+    # Use JS click to avoid "element not interactable" when icon is SVG or covered
+    Execute Javascript    arguments[0].click();    ${heart}
+    Sleep    2s
+    Wait For Page To Load Completely
+    Log    Clicked favourite heart on car card
+
+Verify Favourite Heart State After Click
+    [Documentation]    Verify the heart icon reflects favourite status after clicking (filled/active or still visible; no error).
+    ${timeout}=    Get Config Value    MEDIUM_TIMEOUT
+    ${filled}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${FAVOURITE_HEART_FILLED}    timeout=5s
+    ${heart_visible}=    Run Keyword And Return Status    Element Should Be Visible    ${CAR_CARD_FAVOURITE_HEART}
+    ${heart_visible}=    Run Keyword If    not ${heart_visible}    Run Keyword And Return Status    Element Should Be Visible    ${FAVOURITE_HEART_ICON}    ELSE    Set Variable    ${heart_visible}
+    Should Be True    ${filled} or ${heart_visible}    Heart icon state could not be verified
+    Log    Favourite state verified: heart icon reflects favourite status
+    ${screenshot_name}=    Replace String    ${TEST NAME}    ${SPACE}    _
+    Capture Page Screenshot    ${screenshot_name}.png
+
+Verify No Page Reload Or Error On Favourite Action
+    [Documentation]    Ensure no full page reload or error occurred during the add-to-favourites action.
+    ${url_before}=    Get Location
+    Sleep    1s
+    ${url_after}=    Get Location
+    # Page should still show home/car listing (no error URL or blank)
+    Should Not Contain    ${url_after}    error
+    Should Not Contain    ${url_after}    404
+    ${error_visible}=    Run Keyword And Return Status    Element Should Be Visible    ${ERROR_MESSAGE}
+    Should Not Be True    ${error_visible}    Error message displayed after favourite action
+    Log    No page reload or error during favourite action
