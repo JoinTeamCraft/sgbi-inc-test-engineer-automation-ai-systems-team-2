@@ -59,11 +59,13 @@ Take Screenshot On Failure
 Locate Home Page Car Cards
     [Documentation]    Locates and verifies that car cards are displayed on the Home page
     ${timeout}=    Get Config Value    LONG_TIMEOUT
+    ${short_timeout}=    Get Config Value    SHORT_TIMEOUT
+    ${medium_timeout}=    Get Config Value    MEDIUM_TIMEOUT
     Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
     Execute Javascript    window.scrollTo(0, document.body.scrollHeight/2)
-    Wait Until Keyword Succeeds    5s    1s    Element Should Be Visible    ${HOME_PAGE_MAIN_CONTAINER}
+    Wait Until Keyword Succeeds    ${short_timeout}s    1s    Element Should Be Visible    ${HOME_PAGE_MAIN_CONTAINER}
     # Try multiple locator strategies with retries
-    ${car_found}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${HOME_PAGE_CAR_CARD}    timeout=10s
+    ${car_found}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${HOME_PAGE_CAR_CARD}    timeout=${medium_timeout}
     # If not found, try scrolling and alternative approaches
     Run Keyword If    ${car_found} == ${False}    Scroll To Find Car Cards
     # Check if we found car cards or Rent Now buttons
@@ -119,8 +121,9 @@ Verify Navigation After Rent Now Click
 # --- SG-26 Show More Cars keywords ---
 Scroll To Car Listing Section
     [Documentation]    Scroll down to the car listing section on the Home page
+    ${short_timeout}=    Get Config Value    SHORT_TIMEOUT
     Execute Javascript    window.scrollTo(0, document.body.scrollHeight / 2)
-    Wait Until Keyword Succeeds    5s    1s    Page Should Be Ready
+    Wait Until Keyword Succeeds    ${short_timeout}s    1s    Page Should Be Ready
     FOR    ${i}    IN RANGE    4
         ${show_more_visible}=    Run Keyword And Return Status    Element Should Be Visible    ${HOME_PAGE_SHOW_MORE_CARS_BUTTON}
         Exit For Loop If    ${show_more_visible}
@@ -168,11 +171,12 @@ Wait For Car Count To Increase
 Wait For New Car Cards To Load
     [Documentation]    Wait for new car cards to load after clicking Show More Cars
     ${timeout}=    Get Config Value    LONG_TIMEOUT
+    ${short_timeout}=    Get Config Value    SHORT_TIMEOUT
     Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
-    ${loading_gone}=    Run Keyword And Return Status    Wait Until Element Is Not Visible    ${LOADING_SPINNER}    timeout=5s
-    Run Keyword If    not ${loading_gone}    Wait Until Keyword Succeeds    5s    1s    Page Should Be Ready
+    ${loading_gone}=    Run Keyword And Return Status    Wait Until Element Is Not Visible    ${LOADING_SPINNER}    timeout=${short_timeout}
+    Run Keyword If    not ${loading_gone}    Wait Until Keyword Succeeds    ${short_timeout}s    1s    Page Should Be Ready
     Execute Javascript    window.scrollBy(0, document.body.scrollHeight)
-    Wait Until Keyword Succeeds    5s    1s    Page Should Be Ready
+    Wait Until Keyword Succeeds    ${short_timeout}s    1s    Page Should Be Ready
 
 Verify Car Count Increased
     [Documentation]    Compare initial and updated car counts. Pass when count increased; when unchanged, pass only if no decrease (button worked, no more data or same batch).
