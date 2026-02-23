@@ -59,11 +59,9 @@ Take Screenshot On Failure
 Locate Home Page Car Cards
     [Documentation]    Locates and verifies that car cards are displayed on the Home page
     ${timeout}=    Get Config Value    LONG_TIMEOUT
-    # Wait for any dynamic content to load
-    Sleep    3s
-    # Scroll down to ensure car cards are in view
+    Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
     Execute Javascript    window.scrollTo(0, document.body.scrollHeight/2)
-    Sleep    2s
+    Wait Until Keyword Succeeds    5s    1s    Element Should Be Visible    ${HOME_PAGE_MAIN_CONTAINER}
     # Try multiple locator strategies with retries
     ${car_found}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${HOME_PAGE_CAR_CARD}    timeout=10s
     # If not found, try scrolling and alternative approaches
@@ -84,14 +82,13 @@ Scroll To Find Car Cards
     [Documentation]    Scrolls the page to find car cards if they're not immediately visible
     FOR    ${i}    IN RANGE    5
         Execute Javascript    window.scrollBy(0, 400)
-        Sleep    1.5s
+        Wait Until Keyword Succeeds    2s    0.5s    Page Should Be Ready
         ${car_count}=    Get Element Count    ${HOME_PAGE_CAR_CARD}
         ${rent_now_count}=    Get Element Count    ${HOME_PAGE_RENT_NOW_BUTTON}
         Exit For Loop If    ${car_count} > 0 or ${rent_now_count} > 0
     END
-    # Scroll back to top if needed
     Execute Javascript    window.scrollTo(0, 0)
-    Sleep    1s
+    Wait Until Keyword Succeeds    2s    0.5s    Page Should Be Ready
 
 Click Rent Now Button On Car Card
     [Documentation]    Clicks the Rent Now button on a car card from the Home page
@@ -105,24 +102,19 @@ Click Rent Now Button On Car Card
     Click Element    ${rent_now_buttons}[${card_index}]
 
 Verify Navigation After Rent Now Click
-    [Documentation]    Verifies that the page has navigated after clicking the Rent Now button
+    [Documentation]    Verifies that the page has navigated to car details/booking by asserting a specific element unique to that page.
     ${timeout}=    Get Config Value    LONG_TIMEOUT
     Wait For Page To Load Completely
-    Sleep    2s
-    # Verify that we've navigated away from the home page by checking URL
+    Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
     ${current_url}=    Get Location
-    ${is_home_page}=    Evaluate    "${current_url}" == "https://morent-car.archisacademy.com/" or "${current_url}" == "https://morent-car.archisacademy.com/#" or "${current_url}" == "https://morent-car.archisacademy.com"
-    # Check for car details or booking page elements with multiple strategies
-    ${details_present}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${CAR_DETAILS_PAGE}    timeout=${timeout}
-    ${title_present}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${CAR_DETAILS_TITLE}    timeout=${timeout}
-    # Alternative: check if URL changed or contains car/detail/booking keywords
-    ${url_changed}=    Evaluate    not ${is_home_page}
-    ${url_has_car_keywords}=    Evaluate    "car" in "${current_url}".lower() or "detail" in "${current_url}".lower() or "booking" in "${current_url}".lower() or "/cars/" in "${current_url}".lower()
-    # Log for debugging
-    Log    Current URL: ${current_url}
-    Log    Details present: ${details_present}, Title present: ${title_present}, URL changed: ${url_changed}
-    # Accept if URL changed OR if details/title elements are present
-    Should Be True    ${url_changed} or ${details_present} or ${title_present} or ${url_has_car_keywords}    Navigation verification failed. URL: ${current_url}, Details: ${details_present}, Title: ${title_present}
+    ${base_url}=    Get Config Value    BASE_URL
+    ${base_stripped}=    Evaluate    "${base_url}".rstrip("/")
+    ${is_home_page}=    Evaluate    ("${current_url}".rstrip("/") == "${base_stripped}") or ("${current_url}" == "${base_stripped}" + "#")
+    # Primary check: assert presence of a specific element that only exists on car details/booking page
+    Wait Until Element Is Visible    ${CAR_DETAILS_PAGE}    timeout=${timeout}
+    # If still on home URL, require details/title to be present (stricter than permissive OR)
+    Run Keyword If    ${is_home_page}    Wait Until Element Is Visible    ${CAR_DETAILS_TITLE}    timeout=${timeout}
+    Log    Current URL: ${current_url}; car details page verified
     ${screenshot_name}=    Replace String    ${TEST NAME}    ${SPACE}    _
     Capture Page Screenshot    ${screenshot_name}.png
 
@@ -265,11 +257,11 @@ Fill Billing Information Step1
     Scroll Element Into View    ${BILLING_NAME_INPUT}
     Clear Element Text    ${BILLING_NAME_INPUT}
     Input Text    ${BILLING_NAME_INPUT}    ${name}
-    Run Keyword And Ignore Error    Clear Element Text    ${BILLING_PHONE_INPUT}
+    Clear Element Text    ${BILLING_PHONE_INPUT}
     Input Text    ${BILLING_PHONE_INPUT}    ${phone}
-    Run Keyword And Ignore Error    Clear Element Text    ${BILLING_ADDRESS_INPUT}
+    Clear Element Text    ${BILLING_ADDRESS_INPUT}
     Input Text    ${BILLING_ADDRESS_INPUT}    ${address}
-    Run Keyword And Ignore Error    Clear Element Text    ${BILLING_CITY_INPUT}
+    Clear Element Text    ${BILLING_CITY_INPUT}
     Input Text    ${BILLING_CITY_INPUT}    ${city}
     Log    Filled billing: Name, Phone, Address, City
 
@@ -308,12 +300,12 @@ Fill Rental Information Step2
     ${pickup_time}=    Get Config Value    RENTAL_PICKUP_TIME
     ${dropoff_time}=    Get Config Value    RENTAL_DROPOFF_TIME
     Wait For Page To Load Completely
-    Run Keyword And Ignore Error    Input Text    ${RENTAL_PICKUP_LOCATION}    ${pickup_loc}
-    Run Keyword And Ignore Error    Input Text    ${RENTAL_DROPOFF_LOCATION}    ${dropoff_loc}
-    Run Keyword And Ignore Error    Input Text    ${RENTAL_PICKUP_DATE}    ${pickup_date}
-    Run Keyword And Ignore Error    Input Text    ${RENTAL_DROPOFF_DATE}    ${dropoff_date}
-    Run Keyword And Ignore Error    Input Text    ${RENTAL_PICKUP_TIME}    ${pickup_time}
-    Run Keyword And Ignore Error    Input Text    ${RENTAL_DROPOFF_TIME}    ${dropoff_time}
+    Input Text    ${RENTAL_PICKUP_LOCATION}    ${pickup_loc}
+    Input Text    ${RENTAL_DROPOFF_LOCATION}    ${dropoff_loc}
+    Input Text    ${RENTAL_PICKUP_DATE}    ${pickup_date}
+    Input Text    ${RENTAL_DROPOFF_DATE}    ${dropoff_date}
+    Input Text    ${RENTAL_PICKUP_TIME}    ${pickup_time}
+    Input Text    ${RENTAL_DROPOFF_TIME}    ${dropoff_time}
     Log    Filled rental: locations, dates, times
 
 Click Back In Booking Flow
