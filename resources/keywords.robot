@@ -148,9 +148,11 @@ Verify Mandatory Field Validation Messages
     # Click Continue without entering data
     Click Element    ${REGISTRATION_CONTINUE_BUTTON}
 
-    # Validate for Email address and Password fields for mandatory check
-    Element Attribute Value Should Be    ${REGISTRATION_EMAIL_FIELD_REQUIRED}    ${required_attribute}    ${true_value}
-    Element Attribute Value Should Be    ${REGISTRATION_PASSWORD_FIELD_REQUIRED}    ${required_attribute}    ${true_value}
+    # Validate for Email address and Password fields for mandatory check    
+    ${email_validation}=    Get Element Attribute    ${REGISTRATION_EMAIL_FIELD}    validationMessage
+    Should Not Be Empty    ${email_validation}
+    ${password_validation}=    Get Element Attribute    ${REGISTRATION_PASSWORD_FIELD}    validationMessage
+    Should Not Be Empty    ${password_validation}
 
     # Ensure user stays on Registration page
     Wait Until Element Is Visible    ${REGISTRATION_FORM}    ${timeout}
