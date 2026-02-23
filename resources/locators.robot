@@ -68,6 +68,9 @@ ${FAVOURITES_PAGE_CAR_CARDS}    xpath=//main//div[contains(@class, 'car-card') o
 ${CAR_CARD_TYPE}    xpath=.//*[contains(@class, 'type') or contains(text(), 'SUV') or contains(text(), 'Sedan') or contains(text(), 'Hatchback') or contains(., 'people')] | .//*[contains(@class, 'category') or contains(@class, 'body-type')]
 ${CAR_CARD_CAPACITY_TRANSMISSION}    xpath=.//*[contains(text(), 'people') or contains(., 'people') or contains(text(), 'Automatic') or contains(text(), 'Manual') or contains(., 'transmission') or contains(@class, 'capacity') or contains(@class, 'transmission')]
 
+# Remove from Favourites (SG-30) – heart on Favourites page to un-favourite
+${FAVOURITES_PAGE_CARD_HEART}    xpath=(//main//div[contains(@class, 'card') or contains(@class, 'car-card')])//*[local-name()='svg' and (contains(@class, 'heart') or contains(@class, 'favour') or contains(@class, 'favor'))] | (//main//*[.//button[contains(text(), 'Rent Now')]])//*[local-name()='svg' or self::button][contains(@class, 'heart') or contains(@aria-label, 'favour') or contains(@aria-label, 'favor')]
+
 # Common Locators
 ${LOADING_SPINNER}           xpath=//div[contains(@class, 'loading')]
 ${ERROR_MESSAGE}             xpath=//div[contains(@class, 'error')]

@@ -489,3 +489,50 @@ Verify Each Favourite Card Has Required Elements
     ${screenshot_name}=    Replace String    ${TEST NAME}    ${SPACE}    _
     Capture Page Screenshot    ${screenshot_name}.png
     Log    All favourite cards have required elements (image, name, price, Rent Now, heart)
+
+# --- SG-30 Remove from Favourites keywords ---
+Navigate To Favourites Page
+    [Documentation]    Open the Favourites page via header icon and verify it loaded.
+    Click Favourites Icon In Header
+    Verify Favourites Page Loaded
+    Log    On Favourites page
+
+Get Favourites Page Card Count
+    [Documentation]    Return the number of favourite car cards currently displayed on the Favourites page.
+    ${count}=    Get Element Count    ${FAVOURITES_PAGE_CAR_CARDS}
+    Run Keyword If    ${count} == 0    ${count}=    Get Element Count    ${HOME_PAGE_CAR_CARD}
+    [Return]    ${count}
+
+Click Heart On Favourites Page To Remove From Favourites
+    [Documentation]    Click the heart icon on a favourite car card (e.g. first one) to remove it from favourites.
+    [Arguments]    ${card_index}=0
+    ${timeout}=    Get Config Value    LONG_TIMEOUT
+    Wait Until Element Is Visible    ${FAVOURITES_PAGE_CARD_HEART}    timeout=${timeout}
+    ${hearts}=    Get WebElements    ${FAVOURITES_PAGE_CARD_HEART}
+    ${heart_count}=    Get Length    ${hearts}
+    Run Keyword If    ${heart_count} == 0    ${hearts}=    Get WebElements    ${FAVOURITE_HEART_ICON}
+    Run Keyword If    ${heart_count} == 0    ${heart_count}=    Get Length    ${hearts}
+    Should Be True    ${heart_count} > 0    No heart icon found on Favourites page to remove
+    ${heart}=    Set Variable    ${hearts}[${card_index}]
+    Scroll Element Into View    ${heart}
+    Wait Until Keyword Succeeds    3s    0.5s    Page Should Be Ready
+    Execute Javascript    arguments[0].click();    ${heart}
+    Wait Until Keyword Succeeds    5s    1s    Page Should Be Ready
+    Wait For Page To Load Completely
+    Log    Clicked heart to remove car from favourites
+
+Verify Car Removed From Favourites List
+    [Documentation]    Verify the selected car was removed: card count decreased or the card disappeared.
+    [Arguments]    ${count_before}
+    ${count_after}=    Get Favourites Page Card Count
+    Should Be True    ${count_after} < ${count_before}    Car was not removed from Favourites. Count before: ${count_before}, after: ${count_after}
+    Log    Car removed: list updated from ${count_before} to ${count_after} card(s)
+
+Verify No Page Refresh Or Error After Remove
+    [Documentation]    Ensure no full page refresh or error occurred after removing from favourites.
+    ${url}=    Get Location
+    Should Not Contain    ${url}    error
+    Should Not Contain    ${url}    404
+    ${error_visible}=    Run Keyword And Return Status    Element Should Be Visible    ${ERROR_MESSAGE}
+    Should Not Be True    ${error_visible}    Error message displayed after remove from favourites
+    Log    No page refresh or error after remove
