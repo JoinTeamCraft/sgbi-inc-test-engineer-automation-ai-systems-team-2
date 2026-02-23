@@ -139,12 +139,9 @@ Verify Registration Form Fields Presence
     Element Should Be Visible    ${REGISTRATION_CONTINUE_BUTTON}
 
 Verify Mandatory Field Validation Messages
-    [Documentation]    Verify validation messages when required fields are empty
-
+    [Documentation]    Verify validation messages when required fields are empty and ensure that the user cannot proceed to the next step.
+    
     ${timeout}=    Get Config Value    LONG_TIMEOUT
-    ${required_attribute}=    Get Config Value    REQUIRED_ATTRIBUTE
-    ${true_value}=    Get Config Value    TRUE_VALUE
-
     # Click Continue without entering data
     Click Element    ${REGISTRATION_CONTINUE_BUTTON}
 
