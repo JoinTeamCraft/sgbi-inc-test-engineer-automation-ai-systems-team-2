@@ -2,8 +2,7 @@
 Documentation     Automate the verification of step-by-step navigation in the MoRent booking flow (Next and Back) without data loss or incorrect behavior. If the app requires login before booking, add a login step or run after logging in. Locators may need to match the actual MoRent app DOM.
 Resource          ../../resources/keywords.robot
 Resource          ../../resources/locators.robot
-Test Teardown    Run Keyword If Test Failed    Capture Page Screenshot    failure.png
-Test Teardown    Close All Browsers
+Test Teardown    Run Keywords    Run Keyword If Test Failed    Capture Page Screenshot    failure.png    AND    Close All Browsers
 
 *** Test Cases ***
 SG-27 Verify Booking Flow Step Progression (Next and Back Navigation)
