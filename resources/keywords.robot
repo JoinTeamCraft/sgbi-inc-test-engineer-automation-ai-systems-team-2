@@ -122,13 +122,12 @@ Verify Navigation After Rent Now Click
 Scroll To Car Listing Section
     [Documentation]    Scroll down to the car listing section on the Home page
     Execute Javascript    window.scrollTo(0, document.body.scrollHeight / 2)
-    Sleep    2s
-    # Scroll until Show More Cars or car cards are in view
+    Wait Until Keyword Succeeds    5s    1s    Page Should Be Ready
     FOR    ${i}    IN RANGE    4
         ${show_more_visible}=    Run Keyword And Return Status    Element Should Be Visible    ${HOME_PAGE_SHOW_MORE_CARS_BUTTON}
         Exit For Loop If    ${show_more_visible}
         Execute Javascript    window.scrollBy(0, 350)
-        Sleep    1s
+        Wait Until Keyword Succeeds    2s    0.5s    Page Should Be Ready
     END
 
 Verify Show More Cars Button Visible And Clickable
@@ -159,7 +158,7 @@ Wait For Car Count To Increase
     [Arguments]    ${initial_count}
     ${timeout}=    Get Config Value    LONG_TIMEOUT
     FOR    ${i}    IN RANGE    0    ${timeout}    2
-        Sleep    2s
+        Wait Until Keyword Succeeds    2s    0.5s    Page Should Be Ready
         ${current}=    Get Element Count    ${HOME_PAGE_CAR_CARD}
         ${current}=    Run Keyword If    ${current} == 0    Get Element Count    ${HOME_PAGE_RENT_NOW_BUTTON}    ELSE    Set Variable    ${current}
         Return From Keyword If    ${current} > ${initial_count}    ${current}
@@ -169,17 +168,13 @@ Wait For Car Count To Increase
     [Return]    ${final}
 
 Wait For New Car Cards To Load
-    [Documentation]    Wait for new car cards to load after clicking Show More Cars
+    [Documentation]    Wait for new car cards to load after clicking Show More Cars. Poll for page ready and optional spinner gone; no fixed Sleep fallback.
     ${timeout}=    Get Config Value    LONG_TIMEOUT
-    Sleep    2s
     Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
-    Sleep    3s
-    # Wait for loading indicator to disappear if present
-    ${loading_gone}=    Run Keyword And Return Status    Wait Until Element Is Not Visible    ${LOADING_SPINNER}    timeout=5s
-    Run Keyword If    not ${loading_gone}    Sleep    3s
-    # Scroll down so newly loaded cards may come into view / trigger lazy load
+    Wait Until Keyword Succeeds    5s    1s    Page Should Be Ready
+    Run Keyword And Ignore Error    Wait Until Element Is Not Visible    ${LOADING_SPINNER}    timeout=5s
     Execute Javascript    window.scrollBy(0, document.body.scrollHeight)
-    Sleep    3s
+    Wait Until Keyword Succeeds    5s    1s    Page Should Be Ready
 
 Verify Car Count Increased
     [Documentation]    Compare initial and updated car counts. Pass when count increased; when unchanged, pass only if no decrease (button worked, no more data or same batch).
@@ -208,10 +203,10 @@ Perform Car Search And Navigate To Car Details
     ${pickup}=    Get Config Value    DEFAULT_PICKUP_LOCATION
     Wait Until Element Is Visible    ${HOME_PAGE_SEARCH_BAR}    timeout=${timeout}
     Input Text    ${HOME_PAGE_SEARCH_BAR}    ${pickup}
-    Sleep    1s
+    Wait Until Keyword Succeeds    3s    0.5s    Page Should Be Ready
     Click Element    ${HOME_SEARCH_BUTTON}
     Wait For Page To Load Completely
-    Sleep    3s
+    Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
     Locate Home Page Car Cards
     Click Rent Now Button On Car Card    0
     Verify Navigation After Rent Now Click
@@ -221,13 +216,13 @@ Click Rent Now On Car Details To Start Booking
     [Documentation]    On Car Details page, click Rent Now to start the booking process (Step 1).
     ${timeout}=    Get Config Value    LONG_TIMEOUT
     Wait For Page To Load Completely
-    Sleep    2s
+    Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
     Wait Until Element Is Visible    ${CAR_DETAILS_RENT_NOW_BUTTON}    timeout=${timeout}
     Scroll Element Into View    ${CAR_DETAILS_RENT_NOW_BUTTON}
-    Sleep    1s
+    Wait Until Keyword Succeeds    3s    0.5s    Page Should Be Ready
     Click Element    ${CAR_DETAILS_RENT_NOW_BUTTON}
     Wait For Page To Load Completely
-    Sleep    3s
+    Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
     Capture Page Screenshot    after_rent_now_click.png
     Wait For Booking Step 1 Form
     Log    Started booking flow
@@ -271,7 +266,7 @@ Click Next In Booking Flow
     Wait Until Element Is Visible    ${BOOKING_NEXT_BUTTON}    timeout=${timeout}
     Click Element    ${BOOKING_NEXT_BUTTON}
     Wait For Page To Load Completely
-    Sleep    2s
+    Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
     Log    Clicked Next
 
 Verify Booking Step Is Rental Information
@@ -314,7 +309,7 @@ Click Back In Booking Flow
     Wait Until Element Is Visible    ${BOOKING_BACK_BUTTON}    timeout=${timeout}
     Click Element    ${BOOKING_BACK_BUTTON}
     Wait For Page To Load Completely
-    Sleep    2s
+    Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
     Log    Clicked Back
 
 Verify Back To Previous Step
