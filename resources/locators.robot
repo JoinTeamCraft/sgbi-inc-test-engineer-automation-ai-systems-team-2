@@ -60,6 +60,14 @@ ${CAR_CARD_FAVOURITE_HEART}    xpath=(//div[contains(@class, 'car-card') or cont
 ${FAVOURITE_HEART_ICON}    xpath=//*[local-name()='svg'][contains(@class, 'heart') or contains(@class, 'favourite') or contains(@class, 'favorite') or contains(@class, 'like')] | //button[.//*[local-name()='svg']][contains(@aria-label, 'favour') or contains(@aria-label, 'favor') or contains(@aria-label, 'like')] | //*[@aria-label='Add to favourites' or @aria-label='Add to favorites' or @title='Favourite' or @title='Favorite']
 ${FAVOURITE_HEART_FILLED}    xpath=//*[local-name()='svg'][contains(@class, 'fill') or contains(@class, 'filled') or .//*[local-name()='path' and contains(@fill, 'currentColor')]] | //*[contains(@class, 'active') or contains(@class, 'selected')][.//*[local-name()='svg']]
 
+# Favourites Page (SG-29)
+${HEADER_FAVOURITES_ICON}    xpath=//header//*[contains(@href, 'favourites') or contains(@href, 'favorites') or contains(@aria-label, 'Favourites') or contains(@aria-label, 'Favorites') or contains(@title, 'Favourites') or contains(@title, 'Favorites')] | //header//a[.//*[local-name()='svg']][contains(@class, 'heart') or contains(@class, 'favour') or contains(@class, 'favor')] | //nav//*[contains(text(), 'Favourites') or contains(text(), 'Favorites')] | //header//*[local-name()='svg'][contains(@class, 'heart') or contains(@class, 'favour') or contains(@class, 'favor')]/ancestor::a
+${FAVOURITES_PAGE_TITLE}    xpath=//*[contains(text(), 'Your Favourites') or contains(text(), 'Your Favorites') or contains(., 'Your Favourites') or contains(., 'Your Favorites') or contains(text(), 'Favourites') or contains(text(), 'Favorites')]
+${FAVOURITES_PAGE_CAR_CARDS}    xpath=//main//div[contains(@class, 'car-card') or contains(@class, 'carCard') or contains(@class, 'card')] | //*[.//button[contains(text(), 'Rent Now') or contains(., 'Rent Now')]][contains(@class, 'card') or contains(@class, 'item')]
+# Within a card: car type, capacity/transmission (e.g. "4 people", "Automatic")
+${CAR_CARD_TYPE}    xpath=.//*[contains(@class, 'type') or contains(text(), 'SUV') or contains(text(), 'Sedan') or contains(text(), 'Hatchback') or contains(., 'people')] | .//*[contains(@class, 'category') or contains(@class, 'body-type')]
+${CAR_CARD_CAPACITY_TRANSMISSION}    xpath=.//*[contains(text(), 'people') or contains(., 'people') or contains(text(), 'Automatic') or contains(text(), 'Manual') or contains(., 'transmission') or contains(@class, 'capacity') or contains(@class, 'transmission')]
+
 # Common Locators
 ${LOADING_SPINNER}           xpath=//div[contains(@class, 'loading')]
 ${ERROR_MESSAGE}             xpath=//div[contains(@class, 'error')]
