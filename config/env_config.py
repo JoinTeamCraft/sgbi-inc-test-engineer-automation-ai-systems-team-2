@@ -30,6 +30,16 @@ class EnvConfig:
     # Default Test Data
     DEFAULT_PICKUP_LOCATION = "New York"
     DEFAULT_DROPOFF_LOCATION = "New York"
+    # Booking flow (SG-27) – Billing
+    BILLING_NAME = "Test User"
+    BILLING_PHONE = "+1234567890"
+    BILLING_ADDRESS = "123 Test Street"
+    BILLING_CITY = "New York"
+    # Rental dates/times (use future dates)
+    RENTAL_PICKUP_DATE = "2026-04-01"
+    RENTAL_DROPOFF_DATE = "2026-04-05"
+    RENTAL_PICKUP_TIME = "10:00"
+    RENTAL_DROPOFF_TIME = "10:00"
     
     def get_config_value(self, key):
         """Get configuration value by key."""
