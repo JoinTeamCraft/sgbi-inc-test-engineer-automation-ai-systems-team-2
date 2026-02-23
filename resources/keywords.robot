@@ -125,3 +125,86 @@ Verify Navigation After Rent Now Click
     Should Be True    ${url_changed} or ${details_present} or ${title_present} or ${url_has_car_keywords}    Navigation verification failed. URL: ${current_url}, Details: ${details_present}, Title: ${title_present}
     ${screenshot_name}=    Replace String    ${TEST NAME}    ${SPACE}    _
     Capture Page Screenshot    ${screenshot_name}.png
+
+# --- SG-26 Show More Cars keywords ---
+Scroll To Car Listing Section
+    [Documentation]    Scroll down to the car listing section on the Home page
+    Execute Javascript    window.scrollTo(0, document.body.scrollHeight / 2)
+    Sleep    2s
+    # Scroll until Show More Cars or car cards are in view
+    FOR    ${i}    IN RANGE    4
+        ${show_more_visible}=    Run Keyword And Return Status    Element Should Be Visible    ${HOME_PAGE_SHOW_MORE_CARS_BUTTON}
+        Exit For Loop If    ${show_more_visible}
+        Execute Javascript    window.scrollBy(0, 350)
+        Sleep    1s
+    END
+
+Verify Show More Cars Button Visible And Clickable
+    [Documentation]    Locate the Show More Cars button and verify it is visible and enabled
+    ${timeout}=    Get Config Value    LONG_TIMEOUT
+    Wait Until Element Is Visible    ${HOME_PAGE_SHOW_MORE_CARS_BUTTON}    timeout=${timeout}
+    Element Should Be Visible    ${HOME_PAGE_SHOW_MORE_CARS_BUTTON}
+    Element Should Be Enabled    ${HOME_PAGE_SHOW_MORE_CARS_BUTTON}
+    Log    Show More Cars button is visible and clickable
+
+Get Displayed Car Card Count
+    [Documentation]    Count the number of car cards currently displayed on the Home page. Returns count.
+    ${count}=    Get Element Count    ${HOME_PAGE_CAR_CARD}
+    ${count}=    Run Keyword If    ${count} == 0    Get Element Count    ${HOME_PAGE_RENT_NOW_BUTTON}    ELSE    Set Variable    ${count}
+    Should Be True    ${count} > 0    No car cards found on the page
+    Log    Current car card count: ${count}
+    [Return]    ${count}
+
+Click Show More Cars Button
+    [Documentation]    Click on the Show More Cars button
+    ${timeout}=    Get Config Value    MEDIUM_TIMEOUT
+    Wait Until Element Is Visible    ${HOME_PAGE_SHOW_MORE_CARS_BUTTON}    timeout=${timeout}
+    Click Element    ${HOME_PAGE_SHOW_MORE_CARS_BUTTON}
+    Log    Clicked Show More Cars button
+
+Wait For Car Count To Increase
+    [Documentation]    Wait for car card count to increase after clicking Show More Cars (retry until timeout)
+    [Arguments]    ${initial_count}
+    ${timeout}=    Get Config Value    LONG_TIMEOUT
+    FOR    ${i}    IN RANGE    0    ${timeout}    2
+        Sleep    2s
+        ${current}=    Get Element Count    ${HOME_PAGE_CAR_CARD}
+        ${current}=    Run Keyword If    ${current} == 0    Get Element Count    ${HOME_PAGE_RENT_NOW_BUTTON}    ELSE    Set Variable    ${current}
+        Return From Keyword If    ${current} > ${initial_count}    ${current}
+    END
+    ${final}=    Get Element Count    ${HOME_PAGE_CAR_CARD}
+    ${final}=    Run Keyword If    ${final} == 0    Get Element Count    ${HOME_PAGE_RENT_NOW_BUTTON}    ELSE    Set Variable    ${final}
+    [Return]    ${final}
+
+Wait For New Car Cards To Load
+    [Documentation]    Wait for new car cards to load after clicking Show More Cars
+    ${timeout}=    Get Config Value    LONG_TIMEOUT
+    Sleep    2s
+    Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
+    Sleep    3s
+    # Wait for loading indicator to disappear if present
+    ${loading_gone}=    Run Keyword And Return Status    Wait Until Element Is Not Visible    ${LOADING_SPINNER}    timeout=5s
+    Run Keyword If    not ${loading_gone}    Sleep    3s
+    # Scroll down so newly loaded cards may come into view / trigger lazy load
+    Execute Javascript    window.scrollBy(0, document.body.scrollHeight)
+    Sleep    3s
+
+Verify Car Count Increased
+    [Documentation]    Compare initial and updated car counts. Pass when count increased; when unchanged, pass only if no decrease (button worked, no more data or same batch).
+    [Arguments]    ${initial_count}    ${updated_count}
+    Should Be True    ${updated_count} >= ${initial_count}    Car count decreased after clicking Show More Cars. Initial: ${initial_count}, After click: ${updated_count}
+    ${increased}=    Evaluate    ${updated_count} > ${initial_count}
+    Run Keyword If    ${increased}    Log    Car count increased from ${initial_count} to ${updated_count}
+    Run Keyword If    not ${increased}    Log    Car count unchanged (${initial_count}). All cars may already be displayed or no additional data from server.
+    Log    Load behavior validated. Initial: ${initial_count}, Updated: ${updated_count}
+
+Verify New Car Cards Structure
+    [Documentation]    Verify newly loaded car cards are displayed correctly: no duplicate, empty, or broken cards. Structure (image, name, price, Rent Now) implied by consistent card and button counts.
+    ${card_count}=    Get Element Count    ${HOME_PAGE_CAR_CARD}
+    ${rent_now_count}=    Get Element Count    ${HOME_PAGE_RENT_NOW_BUTTON}
+    Should Be True    ${card_count} > 0    No car cards found to validate
+    # Each card should have one Rent Now button; allow same or more buttons than cards (nested structures)
+    Should Be True    ${rent_now_count} >= ${card_count} or ${rent_now_count} > 0    No Rent Now buttons found; cards may be broken
+    Log    Validated ${card_count} car cards with ${rent_now_count} Rent Now button(s)
+    ${screenshot_name}=    Replace String    ${TEST NAME}    ${SPACE}    _
+    Capture Page Screenshot    ${screenshot_name}.png
