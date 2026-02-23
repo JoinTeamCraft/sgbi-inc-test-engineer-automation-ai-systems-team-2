@@ -1,4 +1,5 @@
 import os
+from datetime import datetime, timedelta
 
 class EnvConfig:
     """
@@ -31,6 +32,17 @@ class EnvConfig:
     # Default Test Data
     DEFAULT_PICKUP_LOCATION = "New York"
     DEFAULT_DROPOFF_LOCATION = "New York"
+    # Booking flow (SG-27) – Billing
+    BILLING_NAME = "Test User"
+    BILLING_PHONE = "+1234567890"
+    BILLING_ADDRESS = "123 Test Street"
+    BILLING_CITY = "New York"
+    # Rental dates/times (dynamic: today + 3 and + 7 days so tests stay valid)
+    _today = datetime.now().date()
+    RENTAL_PICKUP_DATE = (_today + timedelta(days=3)).strftime("%Y-%m-%d")
+    RENTAL_DROPOFF_DATE = (_today + timedelta(days=7)).strftime("%Y-%m-%d")
+    RENTAL_PICKUP_TIME = "10:00"
+    RENTAL_DROPOFF_TIME = "10:00"
     
     def get_config_value(self, key):
         """Get configuration value by key. Fails if TEST_PASSWORD or TEST_OTP is requested but not set."""

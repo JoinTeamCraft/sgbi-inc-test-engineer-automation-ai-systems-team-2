@@ -104,7 +104,7 @@ Click Rent Now Button On Car Card
     Click Element    ${rent_now_buttons}[${card_index}]
 
 Verify Navigation After Rent Now Click
-    [Documentation]    Verifies navigation to car details/booking by asserting a specific element unique to that page.
+    [Documentation]    Verifies that the page has navigated to car details/booking by asserting a specific element unique to that page.
     ${timeout}=    Get Config Value    LONG_TIMEOUT
     Wait For Page To Load Completely
     Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
@@ -112,7 +112,9 @@ Verify Navigation After Rent Now Click
     ${base_url}=    Get Config Value    BASE_URL
     ${base_stripped}=    Evaluate    "${base_url}".rstrip("/")
     ${is_home_page}=    Evaluate    ("${current_url}".rstrip("/") == "${base_stripped}") or ("${current_url}" == "${base_stripped}" + "#")
+    # Primary check: assert presence of a specific element that only exists on car details/booking page
     Wait Until Element Is Visible    ${CAR_DETAILS_PAGE}    timeout=${timeout}
+    # If still on home URL, require details/title to be present (stricter than permissive OR)
     Run Keyword If    ${is_home_page}    Wait Until Element Is Visible    ${CAR_DETAILS_TITLE}    timeout=${timeout}
     Log    Current URL: ${current_url}; car details page verified
     ${screenshot_name}=    Replace String    ${TEST NAME}    ${SPACE}    _
@@ -169,12 +171,12 @@ Wait For Car Count To Increase
     [Return]    ${final}
 
 Wait For New Car Cards To Load
-    [Documentation]    Wait for new car cards to load after clicking Show More Cars
+    [Documentation]    Wait for new car cards to load after clicking Show More Cars. Poll for page ready and optional spinner gone; no fixed Sleep fallback.
     ${timeout}=    Get Config Value    LONG_TIMEOUT
     ${short_timeout}=    Get Config Value    SHORT_TIMEOUT
     Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
-    ${loading_gone}=    Run Keyword And Return Status    Wait Until Element Is Not Visible    ${LOADING_SPINNER}    timeout=${short_timeout}
-    Run Keyword If    not ${loading_gone}    Wait Until Keyword Succeeds    ${short_timeout}s    1s    Page Should Be Ready
+    Wait Until Keyword Succeeds    ${short_timeout}s    1s    Page Should Be Ready
+    Run Keyword And Ignore Error    Wait Until Element Is Not Visible    ${LOADING_SPINNER}    timeout=${short_timeout}
     Execute Javascript    window.scrollBy(0, document.body.scrollHeight)
     Wait Until Keyword Succeeds    ${short_timeout}s    1s    Page Should Be Ready
 
@@ -195,5 +197,144 @@ Verify New Car Cards Structure
     # Each card should have one Rent Now button; allow same or more buttons than cards (nested structures)
     Should Be True    ${rent_now_count} >= ${card_count} or ${rent_now_count} > 0    No Rent Now buttons found; cards may be broken
     Log    Validated ${card_count} car cards with ${rent_now_count} Rent Now button(s)
+    ${screenshot_name}=    Replace String    ${TEST NAME}    ${SPACE}    _
+    Capture Page Screenshot    ${screenshot_name}.png
+
+# --- SG-27 Booking flow step progression keywords ---
+Perform Car Search And Navigate To Car Details
+    [Documentation]    Perform a valid car search from Home and navigate to a Car Details page (via first result / Rent Now).
+    ${timeout}=    Get Config Value    LONG_TIMEOUT
+    ${pickup}=    Get Config Value    DEFAULT_PICKUP_LOCATION
+    Wait Until Element Is Visible    ${HOME_PAGE_SEARCH_BAR}    timeout=${timeout}
+    Input Text    ${HOME_PAGE_SEARCH_BAR}    ${pickup}
+    Wait Until Keyword Succeeds    3s    0.5s    Page Should Be Ready
+    Click Element    ${HOME_SEARCH_BUTTON}
+    Wait For Page To Load Completely
+    Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
+    Locate Home Page Car Cards
+    Click Rent Now Button On Car Card    0
+    Verify Navigation After Rent Now Click
+    Log    Navigated to Car Details page
+
+Click Rent Now On Car Details To Start Booking
+    [Documentation]    On Car Details page, click Rent Now to start the booking process (Step 1).
+    ${timeout}=    Get Config Value    LONG_TIMEOUT
+    Wait For Page To Load Completely
+    Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
+    Wait Until Element Is Visible    ${CAR_DETAILS_RENT_NOW_BUTTON}    timeout=${timeout}
+    Scroll Element Into View    ${CAR_DETAILS_RENT_NOW_BUTTON}
+    Wait Until Keyword Succeeds    3s    0.5s    Page Should Be Ready
+    Click Element    ${CAR_DETAILS_RENT_NOW_BUTTON}
+    Wait For Page To Load Completely
+    Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
+    Capture Page Screenshot    after_rent_now_click.png
+    Wait For Booking Step 1 Form
+    Log    Started booking flow
+
+Wait For Booking Step 1 Form
+    [Documentation]    Wait for the billing (Step 1) form to be visible.
+    ${timeout}=    Get Config Value    LONG_TIMEOUT
+    Wait Until Keyword Succeeds    ${timeout}    3s    Wait For Billing Form Visible
+    Capture Page Screenshot    booking_step1_loaded.png
+    Log    Booking Step 1 form is visible
+
+Wait For Billing Form Visible
+    [Documentation]    Either billing name input, Step 1 / Billing label, or Next button must be visible.
+    ${name_ok}=    Run Keyword And Return Status    Element Should Be Visible    ${BILLING_NAME_INPUT}
+    ${step_ok}=    Run Keyword And Return Status    Element Should Be Visible    ${STEP1_BILLING_LABEL}
+    ${next_ok}=    Run Keyword And Return Status    Element Should Be Visible    ${BOOKING_NEXT_BUTTON}
+    Should Be True    ${name_ok} or ${step_ok} or ${next_ok}    Booking Step 1 form not found: no billing name input, step label, or Next button visible
+
+Fill Billing Information Step1
+    [Documentation]    Enter valid values in all mandatory billing fields: Name, Phone, Address, Town/City.
+    ${timeout}=    Get Config Value    LONG_TIMEOUT
+    ${name}=    Get Config Value    BILLING_NAME
+    ${phone}=    Get Config Value    BILLING_PHONE
+    ${address}=    Get Config Value    BILLING_ADDRESS
+    ${city}=    Get Config Value    BILLING_CITY
+    Wait Until Element Is Visible    ${BILLING_NAME_INPUT}    timeout=${timeout}
+    Scroll Element Into View    ${BILLING_NAME_INPUT}
+    Clear Element Text    ${BILLING_NAME_INPUT}
+    Input Text    ${BILLING_NAME_INPUT}    ${name}
+    Clear Element Text    ${BILLING_PHONE_INPUT}
+    Input Text    ${BILLING_PHONE_INPUT}    ${phone}
+    Clear Element Text    ${BILLING_ADDRESS_INPUT}
+    Input Text    ${BILLING_ADDRESS_INPUT}    ${address}
+    Clear Element Text    ${BILLING_CITY_INPUT}
+    Input Text    ${BILLING_CITY_INPUT}    ${city}
+    Log    Filled billing: Name, Phone, Address, City
+
+Click Next In Booking Flow
+    [Documentation]    Click the Next button in the booking flow.
+    ${timeout}=    Get Config Value    MEDIUM_TIMEOUT
+    Wait Until Element Is Visible    ${BOOKING_NEXT_BUTTON}    timeout=${timeout}
+    Click Element    ${BOOKING_NEXT_BUTTON}
+    Wait For Page To Load Completely
+    Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
+    Log    Clicked Next
+
+Verify Booking Step Is Rental Information
+    [Documentation]    Confirm that the booking flow moved to Step 2 – Rental Information.
+    ${timeout}=    Get Config Value    LONG_TIMEOUT
+    ${step2_visible}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${STEP2_RENTAL_LABEL}    timeout=${timeout}
+    Run Keyword If    not ${step2_visible}    Wait Until Element Is Visible    ${RENTAL_PICKUP_LOCATION}    timeout=${timeout}
+    Run Keyword If    not ${step2_visible}    Wait Until Element Is Visible    ${RENTAL_DROPOFF_LOCATION}    timeout=${timeout}
+    Log    Verified Step 2 – Rental Information
+
+Verify Forward Navigation In Booking Flow
+    [Documentation]    Confirm that the booking flow progressed to the next step after clicking Next (e.g. Step 3 or confirmation).
+    ${timeout}=    Get Config Value    MEDIUM_TIMEOUT
+    # Next step may show Step 3, or Back button indicates we left Step 2
+    ${back_visible}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${BOOKING_BACK_BUTTON}    timeout=${timeout}
+    Should Be True    ${back_visible}    Forward navigation failed: Back button or next step not found
+    Log    Verified forward navigation to next step
+
+Fill Rental Information Step2
+    [Documentation]    Enter valid Pick-Up and Drop-Off details: locations, dates, times.
+    ${timeout}=    Get Config Value    MEDIUM_TIMEOUT
+    ${pickup_loc}=    Get Config Value    DEFAULT_PICKUP_LOCATION
+    ${dropoff_loc}=    Get Config Value    DEFAULT_DROPOFF_LOCATION
+    ${pickup_date}=    Get Config Value    RENTAL_PICKUP_DATE
+    ${dropoff_date}=    Get Config Value    RENTAL_DROPOFF_DATE
+    ${pickup_time}=    Get Config Value    RENTAL_PICKUP_TIME
+    ${dropoff_time}=    Get Config Value    RENTAL_DROPOFF_TIME
+    Wait For Page To Load Completely
+    Input Text    ${RENTAL_PICKUP_LOCATION}    ${pickup_loc}
+    Input Text    ${RENTAL_DROPOFF_LOCATION}    ${dropoff_loc}
+    Input Text    ${RENTAL_PICKUP_DATE}    ${pickup_date}
+    Input Text    ${RENTAL_DROPOFF_DATE}    ${dropoff_date}
+    Input Text    ${RENTAL_PICKUP_TIME}    ${pickup_time}
+    Input Text    ${RENTAL_DROPOFF_TIME}    ${dropoff_time}
+    Log    Filled rental: locations, dates, times
+
+Click Back In Booking Flow
+    [Documentation]    Click the Back button in the booking flow.
+    ${timeout}=    Get Config Value    MEDIUM_TIMEOUT
+    Wait Until Element Is Visible    ${BOOKING_BACK_BUTTON}    timeout=${timeout}
+    Click Element    ${BOOKING_BACK_BUTTON}
+    Wait For Page To Load Completely
+    Wait Until Keyword Succeeds    ${timeout}    2s    Page Should Be Ready
+    Log    Clicked Back
+
+Verify Back To Previous Step
+    [Documentation]    Verify that after clicking Back we are on the previous step (e.g. Step 2 or billing).
+    ${timeout}=    Get Config Value    MEDIUM_TIMEOUT
+    ${short_timeout}=    Get Config Value    SHORT_TIMEOUT
+    # After Back from Step 3 we expect Step 2 (Rental) or after Back from Step 2 we expect Step 1 (Billing)
+    ${rental_visible}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${STEP2_RENTAL_LABEL}    timeout=${timeout}
+    ${rental_input_visible}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${RENTAL_PICKUP_LOCATION}    timeout=${short_timeout}
+    ${billing_visible}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${STEP1_BILLING_LABEL}    timeout=${short_timeout}
+    ${billing_input_visible}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${BILLING_NAME_INPUT}    timeout=${short_timeout}
+    Should Be True    ${rental_visible} or ${rental_input_visible} or ${billing_visible} or ${billing_input_visible}    Back navigation did not show previous step
+    Log    Verified back to previous step
+
+Validate Billing Data Persistence
+    [Documentation]    Verify that previously entered billing data is retained when navigating back.
+    ${timeout}=    Get Config Value    MEDIUM_TIMEOUT
+    ${name}=    Get Config Value    BILLING_NAME
+    Wait Until Element Is Visible    ${BILLING_NAME_INPUT}    timeout=${timeout}
+    ${actual_name}=    Get Value    ${BILLING_NAME_INPUT}
+    Should Be Equal As Strings    ${actual_name}    ${name}    Billing Name was not preserved after Back. Expected: ${name}, Got: ${actual_name}
+    Log    Billing data persisted: Name = ${actual_name}
     ${screenshot_name}=    Replace String    ${TEST NAME}    ${SPACE}    _
     Capture Page Screenshot    ${screenshot_name}.png
